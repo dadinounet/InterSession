@@ -1,0 +1,16 @@
+.idea
+Project/vendor
+Project/.env
+Project/node_modules
+Project/npm-debug.log
+Project/public/storage
+Project/public/host
+Project/storage/*.key
+
+
+
+
+Project/bootstrap/compiled.php
+Project/build/logs
+Project/build/coverage
+Project/bootstrap/compiled.php
