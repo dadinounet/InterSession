@@ -27,12 +27,17 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
     environment:
-      - "MYSQL_DATABASE=homestead"
-      - "MYSQL_USER=homestead"
-      - "MYSQL_PASSWORD=secret"
-      - "MYSQL_ROOT_PASSWORD=secret"
+      - "MYSQL_DATABASE=kraken"
+      - "MYSQL_USER=kraken"
+      - "MYSQL_PASSWORD=kraken"
+      - "MYSQL_ROOT_PASSWORD=kraken"
     ports:
       - "33061:3306"
+
+  mail:
+    build:
+      context: ./
+      dockerfile: mail.docker
 
 volumes:
   dbdata:
