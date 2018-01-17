@@ -3,11 +3,11 @@ services:
 
   app:
     build:
-      context: ./
+      context: ./DockerConfig/
       dockerfile: app.dockerfile
     working_dir: /var/www
     volumes:
-      - ./Project:/var/www
+      - ./KrakenSecurity/:/var/www
     environment:
       - "DB_PORT=3306"
       - "DB_HOST=db"
@@ -16,7 +16,7 @@ services:
 
   web:
     build:
-      context: ./
+      context: ./DockerConfig/
       dockerfile: web.dockerfile
     working_dir: /var/www
     volumes_from:
