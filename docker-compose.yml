@@ -26,7 +26,7 @@ services:
 
 
   db:
-    image: mysql:8
+    image: mysql:5.7
     volumes:
       - dbdata:/var/lib/mysql
     environment:
@@ -61,6 +61,8 @@ services:
     cap_add:
       - NET_ADMIN
       - SYS_PTRACE
+
+
 
 volumes:
   maildata:
