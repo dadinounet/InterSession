@@ -1,0 +1,13 @@
+.idea
+KrakenSecurity/.env
+KrakenSecurity/vendor
+KrakenSecurity/node_modules
+KrakenSecurity/npm-debug.log
+KrakenSecurity/public/storage
+KrakenSecurity/public/host
+KrakenSecurity/storage/*.key
+
+KrakenSecurity/bootstrap/compiled.php
+KrakenSecurity/build/logs
+KrakenSecurity/build/coverage
+KrakenSecurity/bootstrap/compiled.php
