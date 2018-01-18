@@ -71,7 +71,7 @@ class Test
     /**
      * @param Project $project
      */
-    public function setProject(Project $project)
+    protected function setProject(Project $project)
     {
         $this->project = $project;
     }

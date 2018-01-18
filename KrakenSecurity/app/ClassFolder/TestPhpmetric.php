@@ -11,11 +11,33 @@ namespace App\ClassFolder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Class TestPhpmetric
+ * @package App\ClassFolder
+ */
 class TestPhpmetric extends Test
 {
-  public function getJson()
-  {
-      shell_exec("php ./vendor/bin/phpmetrics --report-json=".$this->getProject()->getName()."/phpmetric.json ".$this->getProject()->getName());
-  }
+
+
+    /**
+     * TestPhpmetric constructor.
+     * @param Project
+     */
+    public function __construct(Project $project)
+    {
+        $this->setProject($project);
+        $this->setSource('Php Metric');
+        $project->addTest($this);
+    }
+
+    /**
+     *
+     */
+    public function getJson()
+    {
+        $commande = "php ../vendor/bin/phpmetrics --report-json=".Project::repoTesting."/".$this->getProject()->getName()."/phpmetric.json ".Project::repoTesting."/".$this->getProject()->getName();
+        var_dump($commande);
+        shell_exec($commande);
+    }
 }
 

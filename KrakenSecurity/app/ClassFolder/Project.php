@@ -10,6 +10,8 @@ namespace App\ClassFolder;
 
 
 
+use Symfony\Component\Process\Exception\LogicException;
+
 class Project
 {
     const path = "/var/www/";
@@ -28,6 +30,11 @@ class Project
     private $name;
 
     /**
+     * @var array[test]
+     */
+    private $tests;
+
+    /**
      * Project constructor.
      * @param string $repoGit
      */
@@ -36,6 +43,7 @@ class Project
         $this->repoGit = $repoGit;
         $arraySplitRepoGit = explode ( '/' , $repoGit );
         $arraySplitRepoGit = explode ( '.' , $arraySplitRepoGit[count($arraySplitRepoGit)-1] );
+        $this->tests = array();
 
         $this->setName($arraySplitRepoGit[0]);
 
@@ -74,7 +82,9 @@ class Project
     }
 
 
-
+    /**
+     * Clone the repo git in testing folder.
+     */
     public function cloneProject()
     {
         $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
@@ -111,5 +121,42 @@ class Project
             throw new \Exception("Folder not found");
         }
     }
+
+    public function removeProjectTestingArea()
+    {
+        $commande = "rm -rf ".Project::repoTesting."/".$this->getName();
+        shell_exec($commande);
+    }
+
+    /**
+     * @return array
+     */
+    public function getTests(): array
+    {
+        return $this->tests;
+    }
+
+    /**
+     * @param array $tests
+     */
+    public function setTests(array $tests)
+    {
+        $this->tests = $tests;
+    }
+
+
+    public function addTest(Test $test)
+    {
+        foreach ($this->tests as $testProject)
+        {
+            if($testProject->getSource() == $test->getSource())
+            {
+                throw new LogicException("Test allready set");
+            }
+        }
+        array_push($this->tests, $test);
+    }
+
+
 }
 
