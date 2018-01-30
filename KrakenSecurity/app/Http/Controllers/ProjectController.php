@@ -23,6 +23,7 @@ class ProjectController extends Controller
         $phpmdTest = new TestPhpmd($project);
         $phpmetricTest = new TestPhpmetric($project);
         $testCS = new TestPhpcodesniffer($project);
+        $phploc = new TestPhploc($project);
         $phpmdTest->getCleanCodeRepport();
         $phpmdTest->getCodeSizeRepport();
         $phpmdTest->getControversialRepport();
@@ -30,7 +31,6 @@ class ProjectController extends Controller
         $phpmdTest->getNamingRepport();
         $phpmdTest->getUnusedcodeRepport();
         $testCS->getRepport();
-        $phploc = new TestPhploc($project);
         $phploc->getReport();
         dump($project);
         $phpmetricTest->getJson();
