@@ -15,15 +15,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Test extends Model
 {
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'Tests';
-
-    public $timestamps = false;
-
-    /**
      * @var string
      */
     private $source;

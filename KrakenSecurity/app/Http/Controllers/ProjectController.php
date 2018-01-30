@@ -19,8 +19,9 @@ class ProjectController extends Controller
 {
     public function test()
     {
-        $git = "https://github.com/kedorev/warhammerSymfo.git";
-        $project = new Project("https://github.com/kedorev/warhammerSymfo.git");
+        //$git = "https://github.com/kedorev/warhammerSymfo.git";
+        $git = "https://github.com/sebastianbergmann/phploc.git";
+        $project = Project::newProject($git);
         $project->cloneProject();
         $phpmdTest = new TestPhpmd($project);
         $phpmetricTest = new TestPhpmetric($project);
@@ -37,9 +38,17 @@ class ProjectController extends Controller
         $testCS->getRepport();
         $phploc->getReport();
         dump($project);
-        $project->save();
+
         //$phpmetricTest->getJson();
         //Project::create($project, $git);
+        die;
+
+    }
+
+    public function getProject($id)
+    {
+        $projet = Project::getProjectById(intval($id));
+        dump($projet);
         die;
 
     }

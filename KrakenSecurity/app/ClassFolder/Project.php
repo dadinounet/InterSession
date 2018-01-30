@@ -13,23 +13,13 @@ namespace App\ClassFolder;
 use Illuminate\Database\Eloquent\Model;
 use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\Process\Exception\LogicException;
+use Illuminate\Support\Facades\DB;
 
-class Project extends Model
+class Project
 {
     const path = "/var/www/";
     const repoTesting = Project::path.'TestingArea';
 
-
-
-    protected $fillable = [
-        'repoGit', 'name', 'id',
-    ];
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'projects';
 
 
     /**
@@ -56,16 +46,10 @@ class Project extends Model
 
     /**
      * Project constructor.
-     * @param string $repoGit
      */
-    public function __construct(string $repoGit)
+    protected function __construct()
     {
-        $this->repoGit = $repoGit;
-        $arraySplitRepoGit = explode ( '/' , $repoGit );
-        $arraySplitRepoGit = explode ( '.' , $arraySplitRepoGit[count($arraySplitRepoGit)-1] );
-        $this->tests = array();
 
-        $this->setName($arraySplitRepoGit[0]);
 
     }
 
@@ -185,6 +169,46 @@ class Project extends Model
         array_push($this->tests, $test);
     }
 
+    public static function newProject(string $repoGit) : Project
+    {
+        $project = new Project();
+        $project->repoGit = $repoGit;
+        $arraySplitRepoGit = explode ( '/' , $repoGit );
+        $arraySplitRepoGit = explode ( '.' , $arraySplitRepoGit[count($arraySplitRepoGit)-1] );
+        $project->tests = array();
 
+        $project->setName($arraySplitRepoGit[0]);
+        DB::table('projects')->insert([
+            "repoGit" => $project->getRepoGit(),
+            "name" => $project->getName(),
+            "updated_at" => now(),
+            "created_at" => now(),
+        ]);
+        return $project;
+    }
+
+    public function update()
+    {
+        DB::table('projects')->where('id', $this->id)->update([
+            "repoGit" => $this->getRepoGit(),
+            "name" => $this->getName(),
+            "updated_at" => now(),
+        ]);
+    }
+
+    private function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public static function getProjectById(int $id): ?Project
+    {
+        $data = DB::table('projects')->where('id', $id)->first();
+        $project = new Project();
+        $project->setId($data->id);
+        $project->setName($data->name);
+        $project->setRepoGit($data->repoGit);
+        return $project;
+    }
 }
 
