@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\ClassFolder\Project;
+use App\ClassFolder\TestPhpcodesniffer;
 use App\ClassFolder\TestPhploc;
 use App\ClassFolder\TestPhpmd;
 use App\ClassFolder\TestPhpmetric;
@@ -21,12 +22,14 @@ class ProjectController extends Controller
         $project->cloneProject();
         $phpmdTest = new TestPhpmd($project);
         $phpmetricTest = new TestPhpmetric($project);
+        $testCS = new TestPhpcodesniffer($project);
         $phpmdTest->getCleanCodeRepport();
         $phpmdTest->getCodeSizeRepport();
         $phpmdTest->getControversialRepport();
         $phpmdTest->getDesignRepport();
         $phpmdTest->getNamingRepport();
         $phpmdTest->getUnusedcodeRepport();
+        $testCS->getRepport();
         $phploc = new TestPhploc($project);
         $phploc->getReport();
         dump($project);
