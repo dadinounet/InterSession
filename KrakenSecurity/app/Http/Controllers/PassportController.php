@@ -59,15 +59,15 @@ class PassportController
         }
     }
 
-    public function getDetails(){
+    /*public function getDetails(){
         $user = Auth::user();
         return response()->json(['success' => $user],$this->successStatus);
-    }
+    }*/
 
     public function disconnect(){
         $user = Auth::user();
         if (Auth::check()) {
-            $success['revoke_token'] = $user->token()->revoke();
+            $success['token_to_revoke'] = $user->token()->revoke();
             return response()->json(['success' => $success], $this->successStatus);
         }
         else{

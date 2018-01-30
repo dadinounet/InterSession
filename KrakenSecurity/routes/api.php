@@ -15,13 +15,13 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'PassportController@login')->name('login');
 
-Route::post('register', 'PassportController@register');
+Route::post('register', 'PassportController@register')->name('register');
 
-Route::post('disconnect', 'PassportController@disconnect');
+Route::get('disconnect', 'PassportController@disconnect')->middleware('auth:api');
 
-Route::middleware('auth:api')->group(function() {
+/*Route::middleware('auth:api')->group(function() {
     Route::post('get-details', 'PassportController@getDetails');
-});
+});*/
 //Route::post('get-details', 'PassportController@getDetails')->middleware('client');
 
 
