@@ -1,4 +1,5 @@
 .idea
+
 KrakenSecurity/.env
 KrakenSecurity/vendor
 KrakenSecurity/node_modules
