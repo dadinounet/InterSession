@@ -16,6 +16,7 @@ class ProjectController extends Controller
 {
     public function test()
     {
+        $git = "https://github.com/kedorev/warhammerSymfo.git";
         $project = new Project("https://github.com/kedorev/warhammerSymfo.git");
         $project->cloneProject();
         $phpmdTest = new TestPhpmd($project);
@@ -27,7 +28,10 @@ class ProjectController extends Controller
         $phpmdTest->getNamingRepport();
         $phpmdTest->getUnusedcodeRepport();
         dump($project);
-        $phpmetricTest->getJson();
+        $project->save();
+        //$phpmetricTest->getJson();
+        //Project::create($project, $git);
         die;
+
     }
 }

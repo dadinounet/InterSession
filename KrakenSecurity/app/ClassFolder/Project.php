@@ -10,12 +10,32 @@ namespace App\ClassFolder;
 
 
 
+use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\Process\Exception\LogicException;
 
-class Project
+class Project extends Model
 {
     const path = "/var/www/";
     const repoTesting = Project::path.'TestingArea';
+
+
+
+    protected $fillable = [
+        'repoGit', 'name', 'id',
+    ];
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'projects';
+
+
+    /**
+     * @var integer
+     */
+    protected $id;
 
     /**
      * @var string
@@ -88,37 +108,45 @@ class Project
     public function cloneProject()
     {
         $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
-        try
-        {
-            $folder = $this->getFolder();
-            mkdir(Project::repoTesting."/".$this->getName());
 
-        }
-        catch (\Exception $e)
-        {
-            var_dump($e->getMessage());
+        $this->createFolder();
 
-        }
-
-        shell_exec($commande);
+        $return = shell_exec($commande);
 
     }
 
 
     /**
-     * @return string
-     * @throws \Exception
+     * @return bool
      */
-    public function getFolder(): string
+    public function getFolder(): bool
     {
         $name = "../TestingArea/".$this->getName();
         if(file_exists($name))
         {
-            return $name;
+            return 1;
         }
         else
         {
-            throw new \Exception("Folder not found");
+            return 0;
+        }
+    }
+
+
+    private function createFolder()
+    {
+        if($this->getFolder() == 0)
+        {
+            try
+            {
+                mkdir(Project::repoTesting."/".$this->getName());
+
+            }
+            catch (\Error $e)
+            {
+                dump($e);
+                die;
+            }
         }
     }
 

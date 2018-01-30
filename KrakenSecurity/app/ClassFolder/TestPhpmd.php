@@ -17,6 +17,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class TestPhpmd extends Test
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'PHPMD_Test';
+
 
     private $codeSizeRepport;
     private $cleanCodeRepport;
@@ -132,6 +139,7 @@ class TestPhpmd extends Test
         $commande = "php ../vendor/bin/phpmd ".Project::repoTesting."/".$this->getProject()->getName()."/ xml rulesets/cleancode.xml";
         $resultString = shell_exec($commande);
         $result = simplexml_load_string($resultString);
+
 
         $this->cleanCodeRepport = $result;
     }
