@@ -22,6 +22,23 @@ class Historique extends Migration
             $table->timestamps();
 
         });
+
+
+        Schema::create('tests', function(Blueprint $table) {
+            $table->increments('id');
+            $table->string('source', 255);
+            $table->integer('projectId');
+            $table->timestamps();
+        });
+
+
+
+        Schema::create('reports', function(Blueprint $table) {
+            $table->increments('id');
+            $table->text('report');
+            $table->integer('testId');
+            $table->timestamps();
+        });
     }
 
     /**

@@ -11,32 +11,60 @@ namespace App\ClassFolder;
 
 class TestPhploc extends Test
 {
-    private $report;
+    const fileReportName = "LOGXML_PHPLOC";
+    const source = "Phploc";
 
-    public function __construct(Project $project)
+
+    /**
+     * TestPhpmetric constructor.
+     */
+    private function __construct()
     {
-        $this->setProject($project);
-        $this->setSource('Phploc');
-        $project->addTest($this);
+
     }
+
+    /**
+     * Prevent clonning object
+     */
+    private function __clone()
+    {
+
+    }
+
+
+    public static function newTestPHP(Project $project)
+    {
+        $test = new self();
+        $test->setSource(TestPhploc::source);
+        $test = parent::newTest($project, $test);
+        return $test;
+    }
+
+    public function addReport(Report $report, $parameter = null)
+    {
+        parent::addReport($report, $parameter);
+
+    }
+
 
     /**
      * @return mixed
      */
-    public function getReport()
+    public function getReportXML()
     {
-        if(is_null($this->report))
-        {
-            $this->defineRepport();
-        }
-        return $this->report;
+        $file = fopen(Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhploc::fileReportName, "r");
+        $export = fread($file,filesize(Project::repoTesting."/".$this->getProject()->getName()."/".TestPhploc::fileReportName));
+        return(simplexml_load_string($export));
+
     }
 
 
-    private function defineRepport()
+    public function getCommande($parameter = null)
     {
-        $commande = "php ../vendor/bin/phploc ".Project::repoTesting."/".$this->getProject()->getName();
-        $this->report = shell_exec($commande);
+        //php ./vendor/bin/phploc --log-xml=/var/www/TestingArea/warhammerSymfo/LOG-XML /var/www/TestingArea/warhammerSymfo
+
+        return "php ../vendor/bin/phploc --log-xml=".Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhploc::fileReportName." ".Project::repoTesting."/".$this->getProject()->getName();
     }
-    //
+
+
 }

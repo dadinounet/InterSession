@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\ClassFolder\Project;
+use App\ClassFolder\Report;
 use App\ClassFolder\TestPhpcpd;
 use App\ClassFolder\TestPhpcodesniffer;
 use App\ClassFolder\TestPhploc;
@@ -23,10 +24,17 @@ class ProjectController extends Controller
         $git = "https://github.com/sebastianbergmann/phploc.git";
         $project = Project::newProject($git);
         $project->cloneProject();
-        $phpmdTest = new TestPhpmd($project);
-        $phpmetricTest = new TestPhpmetric($project);
-        $testCpd = new TestPhpcpd($project);
-        $testCS = new TestPhpcodesniffer($project);
+        $phpmdTest = TestPhpmd::newTestPHP($project);
+        //dump($phpmdTest->getSource());
+        $testCpd = TestPhpcpd::newTestPHP($project);
+        $testPHPloc = TestPhploc::newTestPHP($project);
+        $reportMD = Report::newReport($phpmdTest, "codesize");
+
+
+
+        $reportPhploc = Report::newReport($testPHPloc);
+        $reportcpd = Report::newReport($testCpd);
+        /*$testCS = new TestPhpcodesniffer($project);
         $phploc = new TestPhploc($project);
         $phpmdTest->getCleanCodeRepport();
         $phpmdTest->getCodeSizeRepport();
@@ -36,7 +44,7 @@ class ProjectController extends Controller
         $phpmdTest->getUnusedcodeRepport();
         $testCpd->getRepport();
         $testCS->getRepport();
-        $phploc->getReport();
+        $phploc->getReport();*/
         dump($project);
 
         //$phpmetricTest->getJson();

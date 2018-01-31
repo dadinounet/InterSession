@@ -10,7 +10,6 @@ namespace App\ClassFolder;
 
 
 
-use Illuminate\Database\Eloquent\Model;
 use phpDocumentor\Reflection\Types\Parent_;
 use Symfony\Component\Process\Exception\LogicException;
 use Illuminate\Support\Facades\DB;
@@ -163,7 +162,7 @@ class Project
         {
             if($testProject->getSource() == $test->getSource())
             {
-                throw new LogicException("Test allready set");
+                throw new LogicException("Test ".$test->getSource()." allready set");
             }
         }
         array_push($this->tests, $test);
@@ -194,6 +193,10 @@ class Project
             "name" => $this->getName(),
             "updated_at" => now(),
         ]);
+        foreach ($this->getTests() as $test)
+        {
+            $test->update();
+        }
     }
 
     private function setId(int $id)
