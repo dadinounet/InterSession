@@ -38,7 +38,16 @@ services:
     ports:
       - "33061:3306"
 
-
+  composer:
+    restart: 'no'
+    image: composer:latest
+    command: install
+    volumes_from:
+        - app
+    working_dir: /var/www/KrakenSecurity
 
 volumes:
   dbdata:
+
+
+

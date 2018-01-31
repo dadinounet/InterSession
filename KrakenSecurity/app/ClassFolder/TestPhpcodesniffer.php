@@ -11,19 +11,38 @@ namespace App\ClassFolder;
 
 class TestPhpcodesniffer extends Test
 {
-    private $repport;
-
 
     /**
      * TestPhpmetric constructor.
-     * @param Project
      */
-    public function __construct(Project $project)
+    private function __construct()
     {
-        $this->setProject($project);
-        $this->setSource('Code sniffer');
-        $project->addTest($this);
+
     }
+
+    /**
+     * Prevent clonning object
+     */
+    private function __clone()
+    {
+
+    }
+
+
+    public static function newTestPHP(Project $project)
+    {
+        $test = new self();
+        $test = parent::newTest($project, $test);
+        $test->setSource('Code sniffer');
+        return $test;
+    }
+
+
+    public function getCommande()
+    {
+        return "php ../vendor/bin/phpcs --report=xml ".Project::repoTesting."/".$this->getProject()->getName();
+    }
+
 
 
 
@@ -38,7 +57,7 @@ class TestPhpcodesniffer extends Test
 
     private function defineRepport()
     {
-        $commande = "php ../vendor/bin/phpcs --report=xml ".Project::repoTesting."/".$this->getProject()->getName();
+        $commande =
         $resultString = shell_exec($commande);
 
 

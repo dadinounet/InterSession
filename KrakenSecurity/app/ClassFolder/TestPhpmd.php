@@ -17,7 +17,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class TestPhpmd extends Test
 {
-
     private $codeSizeRepport;
     private $cleanCodeRepport;
     private $controversialRepport;
@@ -28,14 +27,32 @@ class TestPhpmd extends Test
 
     /**
      * TestPhpmetric constructor.
-     * @param Project
      */
-    public function __construct(Project $project)
+    private function __construct()
     {
-        $this->setProject($project);
-        $this->setSource('Phpmd');
-        $project->addTest($this);
+
     }
+
+    /**
+     * Prevent clonning object
+     */
+    private function __clone()
+    {
+
+    }
+
+
+    public static function newTestPHP(Project $project)
+    {
+        $test = new self();
+        $test->setSource('Phpmd');
+        $test = parent::newTest($project, $test);
+        return $test;
+    }
+
+
+
+
 
     /**
      * @return mixed
@@ -112,15 +129,25 @@ class TestPhpmd extends Test
 
 
 
-
-
-
-    /**
-     *
-     */
-    private function getRepportCodeSize()
+    public function getCommande($parameter = null)
     {
-        $commande = "php ../vendor/bin/phpmd ".Project::repoTesting."/".$this->getProject()->getName()."/ xml rulesets/codesize.xml";
+        $validRules = array("codesize","cleancode","controversial","design","naming","unusedcode" );
+        if(in_array($parameter, $validRules ))
+        {
+            return  "php ../vendor/bin/phpmd ".Project::repoTesting."/".$this->getProject()->getName()."/ xml rulesets/".$parameter.".xml";
+        }
+        else
+        {
+            throw new \LogicException("Rules ".$parameter." not found");
+        }
+    }
+
+
+
+
+    /*private function getRepportCodeSize()
+    {
+        $commande = ;
         $resultString = shell_exec($commande);
         $result = simplexml_load_string($resultString);
 
@@ -132,6 +159,7 @@ class TestPhpmd extends Test
         $commande = "php ../vendor/bin/phpmd ".Project::repoTesting."/".$this->getProject()->getName()."/ xml rulesets/cleancode.xml";
         $resultString = shell_exec($commande);
         $result = simplexml_load_string($resultString);
+
 
         $this->cleanCodeRepport = $result;
     }
@@ -170,7 +198,7 @@ class TestPhpmd extends Test
         $result = simplexml_load_string($resultString);
 
         $this->unusedcodeRepport = $result;
-    }
+    }*/
 
 
 }

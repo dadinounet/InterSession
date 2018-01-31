@@ -8,10 +8,16 @@
 
 namespace App\ClassFolder;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Test
+
+/**
+ * Class Test
+ * @package App\ClassFolder
+ */
+abstract class Test
 {
     /**
      * @var string
@@ -27,6 +33,62 @@ class Test
      * @var Project
      */
     private $project;
+
+
+    /**
+     * @var array
+     */
+    protected $reports;
+
+    /**
+     *
+     * @param string $source
+     */
+    private function __construct()
+    {
+    }
+    /**
+     * Prevent clonning
+     */
+    private function __clone()
+    {
+    }
+
+    protected static function newTest(Project $project, Test $test) :Test
+    {
+        $test->reports = array();
+        $test->setProject($project);
+        $project->addTest($test);
+        return $test;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReports() :array
+    {
+        return $this->reports;
+    }
+
+
+    /**
+     * @param Report $report
+     */
+    public function addReport(Report $report, $parameter = null)
+    {
+        array_push($this->reports, $report);
+        $report->setCommande($this->getCommande($parameter));
+    }
+
+
+    /**
+     * @param Report $report
+     */
+    public function removeReport(Report $report)
+    {
+        $this->reports->forget($report);
+    }
+
 
     /**
      * @return string
@@ -77,6 +139,7 @@ class Test
     }
 
 
+    abstract public function getCommande($parameter = null);
 
 
 }

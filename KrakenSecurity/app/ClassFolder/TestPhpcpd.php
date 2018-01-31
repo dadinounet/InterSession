@@ -13,12 +13,36 @@ class TestPhpcpd extends Test
 {
     private $repport;
 
-    public function __construct(Project $project)
+
+    /**
+     * TestPhpmetric constructor.
+     */
+    private function __construct()
+    {}
+
+    /**
+     * Prevent clonning object
+     */
+    private function __clone()
+    {}
+
+
+    public static function newTestPHP(Project $project)
     {
-        $this->setProject($project);
-        $this->setSource('Phpcpd');
-        $project->addTest($this);
+        $test = new self();
+        $test->setSource('Phpcpd');
+        $test = parent::newTest($project, $test);
+        return $test;
     }
+
+
+    public function getCommande($parameter = null)
+    {
+        return "php ../vendor/bin/phpcpd ".Project::repoTesting."/".$this->getProject()->getName();
+    }
+
+
+
     /**
      * @return mixed
      */
@@ -34,9 +58,9 @@ class TestPhpcpd extends Test
 /*
 composer require --dev sebastian/phpcpd*/
 
-    private function editReport()
+    private function defineReport()
     {
-        $commande =  "php ../vendor/bin/phpcpd ".Project::repoTesting."/".$this->getProject()->getName();
+
         $this->repport = shell_exec($commande);
     }
 }

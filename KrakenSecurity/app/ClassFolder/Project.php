@@ -10,13 +10,16 @@ namespace App\ClassFolder;
 
 
 
+use phpDocumentor\Reflection\Types\Parent_;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Exception\LogicException;
+use Illuminate\Support\Facades\DB;
 
 class Project
 {
     const path = "/var/www/";
     const repoTesting = Project::path.'TestingArea';
+  
     /**
      * @var integer
      */
@@ -37,8 +40,7 @@ class Project
      * Project constructor.
      */
     protected function __construct()
-    {
-    }
+    {}
     /**
      * @return string
      */
@@ -74,8 +76,8 @@ class Project
     {
         $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
         $this->createFolder();
-        dump($commande);
-        shell_exec($commande);
+        $return = shell_exec($commande);
+
     }
     /**
      * @return bool
@@ -92,6 +94,7 @@ class Project
             return 0;
         }
     }
+  
     private function createFolder()
     {
         if($this->getFolder() == 0)
@@ -132,11 +135,12 @@ class Project
         {
             if($testProject->getSource() == $test->getSource())
             {
-                throw new LogicException("Test allready set");
+                throw new LogicException("Test ".$test->getSource()." allready set");
             }
         }
         array_push($this->tests, $test);
     }
+
     public static function newProject(string $repoGit) : Project
     {
         $project = new Project();
@@ -144,15 +148,22 @@ class Project
         $arraySplitRepoGit = explode ( '/' , $repoGit );
         $arraySplitRepoGit = explode ( '.' , $arraySplitRepoGit[count($arraySplitRepoGit)-1] );
         $project->tests = array();
+
         $project->setName($arraySplitRepoGit[0]);
         /*DB::table('projects')->insert([
+
             "repoGit" => $project->getRepoGit(),
             "name" => $project->getName(),
             "updated_at" => now(),
             "created_at" => now(),
+        ]);
+        return $project;
+    }
+
         ]);*/
         return $project;
     }
+  
     public function update()
     {
         DB::table('projects')->where('id', $this->id)->update([
@@ -160,7 +171,13 @@ class Project
             "name" => $this->getName(),
             "updated_at" => now(),
         ]);
+        foreach ($this->getTests() as $test)
+        {
+            $test->update();
+        }
     }
+
+   
     private function setId(int $id)
     {
         $this->id = $id;
