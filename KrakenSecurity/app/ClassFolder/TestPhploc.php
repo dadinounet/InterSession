@@ -40,12 +40,6 @@ class TestPhploc extends Test
         return $test;
     }
 
-    public function addReport(Report $report, $parameter = null)
-    {
-        parent::addReport($report, $parameter);
-
-    }
-
 
     /**
      * @return mixed
@@ -61,8 +55,6 @@ class TestPhploc extends Test
 
     public function getCommande($parameter = null)
     {
-        //php ./vendor/bin/phploc --log-xml=/var/www/TestingArea/warhammerSymfo/LOG-XML /var/www/TestingArea/warhammerSymfo
-
         return "php ../vendor/bin/phploc --log-xml=".Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhploc::fileReportName." ".Project::repoTesting."/".$this->getProject()->getName();
     }
 

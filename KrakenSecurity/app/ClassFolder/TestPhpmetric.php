@@ -35,13 +35,5 @@ class TestPhpmetric extends Test
     {
         return "php ../vendor/bin/phpmetrics --report-json=".Project::repoTesting."/".$this->getProject()->getName()."/phpmetric.json ".Project::repoTesting."/".$this->getProject()->getName();
     }
-
-
-    /**
-     *
-     */
-    public function getJson()
-    {
-    }
 }
 

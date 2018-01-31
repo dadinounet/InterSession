@@ -45,9 +45,13 @@ class Report
         $test->addReport($report, $parameter);
         $report->commande = $test->getCommande($parameter);
         $report->report = shell_exec($report->getCommande());
-        if($test->getSource() == TestPhploc::source)
+        if($test->getSource() == TestPhploc::source || $test->getSource() == TestPhpcpd::source)
         {
             $report->report = $test->getReportXML();
+        }
+        if($test->getSource() == TestPhpmd::source)
+        {
+            $report->report = simplexml_load_string($report->report);
         }
         return $report;
     }

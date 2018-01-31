@@ -20,8 +20,8 @@ class ProjectController extends Controller
 {
     public function test()
     {
-        //$git = "https://github.com/kedorev/warhammerSymfo.git";
-        $git = "https://github.com/sebastianbergmann/phploc.git";
+        $git = "https://github.com/kedorev/warhammerSymfo.git";
+        //$git = "https://github.com/sebastianbergmann/phploc.git";
         $project = Project::newProject($git);
         $project->cloneProject();
         $phpmdTest = TestPhpmd::newTestPHP($project);
