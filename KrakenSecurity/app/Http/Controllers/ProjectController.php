@@ -20,35 +20,26 @@ class ProjectController extends Controller
 {
     public function test()
     {
-        $git = "https://github.com/kedorev/warhammerSymfo.git";
-        //$git = "https://github.com/sebastianbergmann/phploc.git";
+        //$git = "https://github.com/kedorev/warhammerSymfo.git";
+        $git = "https://github.com/sebastianbergmann/phploc.git";
         $project = Project::newProject($git);
         $project->cloneProject();
+
         $phpmdTest = TestPhpmd::newTestPHP($project);
-        //dump($phpmdTest->getSource());
         $testCpd = TestPhpcpd::newTestPHP($project);
         $testPHPloc = TestPhploc::newTestPHP($project);
-        $reportMD = Report::newReport($phpmdTest, "codesize");
+        $testSniffer = TestPhpcodesniffer::newTestPHP($project);
 
-
-
+        $reportMDcodesize = Report::newReport($phpmdTest, "codesize");
+        $reportMDcleancode = Report::newReport($phpmdTest, "cleancode");
         $reportPhploc = Report::newReport($testPHPloc);
         $reportcpd = Report::newReport($testCpd);
-        /*$testCS = new TestPhpcodesniffer($project);
-        $phploc = new TestPhploc($project);
-        $phpmdTest->getCleanCodeRepport();
-        $phpmdTest->getCodeSizeRepport();
-        $phpmdTest->getControversialRepport();
-        $phpmdTest->getDesignRepport();
-        $phpmdTest->getNamingRepport();
-        $phpmdTest->getUnusedcodeRepport();
-        $testCpd->getRepport();
-        $testCS->getRepport();
-        $phploc->getReport();*/
+        $reportSnifer = Report::newReport($testSniffer);
+
+
+
         dump($project);
 
-        //$phpmetricTest->getJson();
-        //Project::create($project, $git);
         die;
 
     }

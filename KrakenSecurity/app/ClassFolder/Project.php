@@ -11,6 +11,7 @@ namespace App\ClassFolder;
 
 
 use phpDocumentor\Reflection\Types\Parent_;
+use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 use Symfony\Component\Process\Exception\LogicException;
 use Illuminate\Support\Facades\DB;
 
@@ -43,13 +44,24 @@ class Project
      */
     private $tests;
 
+
+    /**
+     * @var
+     */
+    protected $created_at;
+
+    /**
+     * @var
+     */
+    protected $updated_at;
+
     /**
      * Project constructor.
      */
     protected function __construct()
     {
 
-
+        $this->tests = array();
     }
 
     /**
@@ -176,13 +188,16 @@ class Project
         $arraySplitRepoGit = explode ( '.' , $arraySplitRepoGit[count($arraySplitRepoGit)-1] );
         $project->tests = array();
 
+        $project->created_at = now();
+        $project->updated_at = now();
         $project->setName($arraySplitRepoGit[0]);
-        DB::table('projects')->insert([
+        $id =  DB::table('projects')->insertGetId([
             "repoGit" => $project->getRepoGit(),
             "name" => $project->getName(),
-            "updated_at" => now(),
-            "created_at" => now(),
+            "updated_at" => $project->created_at,
+            "created_at" => $project->updated_at,
         ]);
+        $project->setId($id);
         return $project;
     }
 
@@ -204,13 +219,59 @@ class Project
         $this->id = $id;
     }
 
+    /**
+     * @return int
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return date
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * @param date $created_at
+     */
+    protected function setCreatedAt($created_at): void
+    {
+        $this->created_at = $created_at;
+    }
+
+    /**
+     * @return date
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * @param date $updated_at
+     */
+    protected function setUpdatedAt( $updated_at): void
+    {
+        $this->updated_at = $updated_at;
+    }
+
+
+
     public static function getProjectById(int $id): ?Project
     {
         $data = DB::table('projects')->where('id', $id)->first();
-        $project = new Project();
+        $project = new self();
+
         $project->setId($data->id);
         $project->setName($data->name);
         $project->setRepoGit($data->repoGit);
+        $project->setCreatedAt($data->created_at);
+        $project->setUpdatedAt($data->updated_at);
+        Test::getTestByProject($project);
         return $project;
     }
 }

@@ -35,8 +35,14 @@ class TestPhploc extends Test
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test->setSource(TestPhploc::source);
-        $test = parent::newTest($project, $test);
+        $test = parent::newTest($project, $test, TestPhploc::source);
+        return $test;
+    }
+
+    public static function getTestFromDatas(Project $project, $datas)
+    {
+        $test = new self();
+        $test = parent::newTestFromDatas($project, $test, $datas);
         return $test;
     }
 

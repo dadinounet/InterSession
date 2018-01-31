@@ -19,6 +19,8 @@ class TestPhpmd extends Test
 {
     const source = "Phpmd";
 
+    const validRules = array("codesize","cleancode","controversial","design","naming","unusedcode" );
+
 
     /**
      * TestPhpmetric constructor.
@@ -40,16 +42,21 @@ class TestPhpmd extends Test
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test->setSource(TestPhpmd::source);
-        $test = parent::newTest($project, $test);
+        $test = parent::newTest($project, $test, TestPhpmd::source);
+        return $test;
+    }
+
+    public static function getTestFromDatas(Project $project, $datas)
+    {
+        $test = new self();
+        $test = parent::newTestFromDatas($project, $test, $datas);
         return $test;
     }
 
 
     public function getCommande($parameter = null)
     {
-        $validRules = array("codesize","cleancode","controversial","design","naming","unusedcode" );
-        if(in_array($parameter, $validRules ))
+        if(in_array($parameter, TestPhpmd::validRules ))
         {
             return  "php ../vendor/bin/phpmd ".Project::repoTesting."/".$this->getProject()->getName()."/ xml rulesets/".$parameter.".xml";
         }

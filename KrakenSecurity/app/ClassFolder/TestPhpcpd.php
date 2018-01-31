@@ -32,7 +32,14 @@ class TestPhpcpd extends Test
     {
         $test = new self();
         $test->setSource(TestPhpcpd::source);
-        $test = parent::newTest($project, $test);
+        $test = parent::newTest($project, $test,TestPhpcpd::source);
+        return $test;
+    }
+
+    public static function getTestFromDatas(Project $project, $datas)
+    {
+        $test = new self();
+        $test = parent::newTestFromDatas($project, $test, $datas);
         return $test;
     }
 
