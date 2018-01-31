@@ -11,6 +11,7 @@ namespace App\ClassFolder;
 
 
 use phpDocumentor\Reflection\Types\Parent_;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Exception\LogicException;
 use Illuminate\Support\Facades\DB;
 
@@ -18,40 +19,28 @@ class Project
 {
     const path = "/var/www/";
     const repoTesting = Project::path.'TestingArea';
-
-
-
+  
     /**
      * @var integer
      */
     protected $id;
-
     /**
      * @var string
      */
     private $repoGit;
-
-
-
     /**
      * @var string
      */
     private $name;
-
     /**
      * @var array[test]
      */
     private $tests;
-
     /**
      * Project constructor.
      */
     protected function __construct()
-    {
-
-
-    }
-
+    {}
     /**
      * @return string
      */
@@ -59,7 +48,6 @@ class Project
     {
         return $this->repoGit;
     }
-
     /**
      * @param string $repoGit
      */
@@ -67,7 +55,6 @@ class Project
     {
         $this->repoGit = $repoGit;
     }
-
     /**
      * @return string
      */
@@ -75,7 +62,6 @@ class Project
     {
         return $this->name;
     }
-
     /**
      * @param string $name
      */
@@ -83,22 +69,16 @@ class Project
     {
         $this->name = $name;
     }
-
-
     /**
      * Clone the repo git in testing folder.
      */
     public function cloneProject()
     {
         $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
-
         $this->createFolder();
-
         $return = shell_exec($commande);
 
     }
-
-
     /**
      * @return bool
      */
@@ -114,8 +94,7 @@ class Project
             return 0;
         }
     }
-
-
+  
     private function createFolder()
     {
         if($this->getFolder() == 0)
@@ -123,7 +102,6 @@ class Project
             try
             {
                 mkdir(Project::repoTesting."/".$this->getName());
-
             }
             catch (\Error $e)
             {
@@ -132,13 +110,11 @@ class Project
             }
         }
     }
-
     public function removeProjectTestingArea()
     {
         $commande = "rm -rf ".Project::repoTesting."/".$this->getName();
         shell_exec($commande);
     }
-
     /**
      * @return array
      */
@@ -146,7 +122,6 @@ class Project
     {
         return $this->tests;
     }
-
     /**
      * @param array $tests
      */
@@ -154,8 +129,6 @@ class Project
     {
         $this->tests = $tests;
     }
-
-
     public function addTest(Test $test)
     {
         foreach ($this->tests as $testProject)
@@ -177,7 +150,8 @@ class Project
         $project->tests = array();
 
         $project->setName($arraySplitRepoGit[0]);
-        DB::table('projects')->insert([
+        /*DB::table('projects')->insert([
+
             "repoGit" => $project->getRepoGit(),
             "name" => $project->getName(),
             "updated_at" => now(),
@@ -186,6 +160,10 @@ class Project
         return $project;
     }
 
+        ]);*/
+        return $project;
+    }
+  
     public function update()
     {
         DB::table('projects')->where('id', $this->id)->update([
@@ -199,11 +177,11 @@ class Project
         }
     }
 
+   
     private function setId(int $id)
     {
         $this->id = $id;
     }
-
     public static function getProjectById(int $id): ?Project
     {
         $data = DB::table('projects')->where('id', $id)->first();

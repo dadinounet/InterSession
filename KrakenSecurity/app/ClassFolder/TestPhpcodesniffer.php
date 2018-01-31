@@ -59,6 +59,8 @@ class TestPhpcodesniffer extends Test
     {
         $commande =
         $resultString = shell_exec($commande);
+
+
         $result = simplexml_load_string($resultString);
 
         $this->repport = $result;

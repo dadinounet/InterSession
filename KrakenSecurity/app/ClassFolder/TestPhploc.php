@@ -67,4 +67,20 @@ class TestPhploc extends Test
     }
 
 
+
+
+  
+
+
+    public function getJson()
+    {
+        $report_to_JSON = $this->getReport();
+        dump($report_to_JSON);
+        dump(getType($report_to_JSON));
+        /*$lines = explode("\n", $report_to_JSON);
+        foreach ($lines as $line){
+            dump($line);
+    }*/
+        //dump(json_encode($report_to_JSON));
+    }
 }

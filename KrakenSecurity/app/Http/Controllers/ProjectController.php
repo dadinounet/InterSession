@@ -34,17 +34,9 @@ class ProjectController extends Controller
 
         $reportPhploc = Report::newReport($testPHPloc);
         $reportcpd = Report::newReport($testCpd);
-        /*$testCS = new TestPhpcodesniffer($project);
-        $phploc = new TestPhploc($project);
-        $phpmdTest->getCleanCodeRepport();
-        $phpmdTest->getCodeSizeRepport();
-        $phpmdTest->getControversialRepport();
-        $phpmdTest->getDesignRepport();
-        $phpmdTest->getNamingRepport();
-        $phpmdTest->getUnusedcodeRepport();
-        $testCpd->getRepport();
-        $testCS->getRepport();
-        $phploc->getReport();*/
+         $phploc->getReport();
+        $phploc->getJson();
+        dump($project);
         dump($project);
 
         //$phpmetricTest->getJson();
@@ -57,6 +49,7 @@ class ProjectController extends Controller
     {
         $projet = Project::getProjectById(intval($id));
         dump($projet);
+
         die;
 
     }
