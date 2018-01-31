@@ -19,12 +19,12 @@ class ProjectController extends Controller
 {
     public function test()
     {
-        $project = new Project("https://github.com/kedorev/warhammerSymfo.git");
+        $project = Project::newProject("https://github.com/kedorev/warhammerSymfo.git");
         $project->cloneProject();
         $phpmdTest = new TestPhpmd($project);
         $phpmetricTest = new TestPhpmetric($project);
         $testCpd = new TestPhpcpd($project);
-        $testCS = new TestPhpcodesniffer($project);
+        //$testCS = new TestPhpcodesniffer($project);
         $phploc = new TestPhploc($project);
         $phpmdTest->getCleanCodeRepport();
         $phpmdTest->getCodeSizeRepport();
@@ -33,10 +33,12 @@ class ProjectController extends Controller
         $phpmdTest->getNamingRepport();
         $phpmdTest->getUnusedcodeRepport();
         $testCpd->getRepport();
-        $testCS->getRepport();
+        //$testCS->getRepport();
+        //dump(json_decode($phploc->getReport()));
         $phploc->getReport();
+        $phploc->getJson();
         dump($project);
-        $phpmetricTest->getJson();
+        //$phpmetricTest->getJson();
         die;
     }
 }

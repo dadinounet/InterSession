@@ -10,45 +10,35 @@ namespace App\ClassFolder;
 
 
 
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Exception\LogicException;
 
 class Project
 {
     const path = "/var/www/";
     const repoTesting = Project::path.'TestingArea';
-
+    /**
+     * @var integer
+     */
+    protected $id;
     /**
      * @var string
      */
     private $repoGit;
-
-
-
     /**
      * @var string
      */
     private $name;
-
     /**
      * @var array[test]
      */
     private $tests;
-
     /**
      * Project constructor.
-     * @param string $repoGit
      */
-    public function __construct(string $repoGit)
+    protected function __construct()
     {
-        $this->repoGit = $repoGit;
-        $arraySplitRepoGit = explode ( '/' , $repoGit );
-        $arraySplitRepoGit = explode ( '.' , $arraySplitRepoGit[count($arraySplitRepoGit)-1] );
-        $this->tests = array();
-
-        $this->setName($arraySplitRepoGit[0]);
-
     }
-
     /**
      * @return string
      */
@@ -56,7 +46,6 @@ class Project
     {
         return $this->repoGit;
     }
-
     /**
      * @param string $repoGit
      */
@@ -64,7 +53,6 @@ class Project
     {
         $this->repoGit = $repoGit;
     }
-
     /**
      * @return string
      */
@@ -72,7 +60,6 @@ class Project
     {
         return $this->name;
     }
-
     /**
      * @param string $name
      */
@@ -80,54 +67,51 @@ class Project
     {
         $this->name = $name;
     }
-
-
     /**
      * Clone the repo git in testing folder.
      */
     public function cloneProject()
     {
         $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
-        try
-        {
-            $folder = $this->getFolder();
-            mkdir(Project::repoTesting."/".$this->getName());
-
-        }
-        catch (\Exception $e)
-        {
-            var_dump($e->getMessage());
-
-        }
-
+        $this->createFolder();
+        dump($commande);
         shell_exec($commande);
-
     }
-
-
     /**
-     * @return string
-     * @throws \Exception
+     * @return bool
      */
-    public function getFolder(): string
+    public function getFolder(): bool
     {
         $name = "../TestingArea/".$this->getName();
         if(file_exists($name))
         {
-            return $name;
+            return 1;
         }
         else
         {
-            throw new \Exception("Folder not found");
+            return 0;
         }
     }
-
+    private function createFolder()
+    {
+        if($this->getFolder() == 0)
+        {
+            try
+            {
+                mkdir(Project::repoTesting."/".$this->getName());
+            }
+            catch (\Error $e)
+            {
+                dump($e);
+                die;
+            }
+        }
+    }
     public function removeProjectTestingArea()
     {
         $commande = "rm -rf ".Project::repoTesting."/".$this->getName();
         shell_exec($commande);
     }
-
     /**
      * @return array
      */
@@ -135,7 +119,6 @@ class Project
     {
         return $this->tests;
     }
-
     /**
      * @param array $tests
      */
@@ -143,8 +126,6 @@ class Project
     {
         $this->tests = $tests;
     }
-
-
     public function addTest(Test $test)
     {
         foreach ($this->tests as $testProject)
@@ -156,7 +137,42 @@ class Project
         }
         array_push($this->tests, $test);
     }
-
-
+    public static function newProject(string $repoGit) : Project
+    {
+        $project = new Project();
+        $project->repoGit = $repoGit;
+        $arraySplitRepoGit = explode ( '/' , $repoGit );
+        $arraySplitRepoGit = explode ( '.' , $arraySplitRepoGit[count($arraySplitRepoGit)-1] );
+        $project->tests = array();
+        $project->setName($arraySplitRepoGit[0]);
+        /*DB::table('projects')->insert([
+            "repoGit" => $project->getRepoGit(),
+            "name" => $project->getName(),
+            "updated_at" => now(),
+            "created_at" => now(),
+        ]);*/
+        return $project;
+    }
+    public function update()
+    {
+        DB::table('projects')->where('id', $this->id)->update([
+            "repoGit" => $this->getRepoGit(),
+            "name" => $this->getName(),
+            "updated_at" => now(),
+        ]);
+    }
+    private function setId(int $id)
+    {
+        $this->id = $id;
+    }
+    public static function getProjectById(int $id): ?Project
+    {
+        $data = DB::table('projects')->where('id', $id)->first();
+        $project = new Project();
+        $project->setId($data->id);
+        $project->setName($data->name);
+        $project->setRepoGit($data->repoGit);
+        return $project;
+    }
 }
 

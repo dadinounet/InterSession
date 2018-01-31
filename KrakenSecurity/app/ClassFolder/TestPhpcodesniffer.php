@@ -40,6 +40,8 @@ class TestPhpcodesniffer extends Test
     {
         $commande = "php ../vendor/bin/phpcs --report=xml ".Project::repoTesting."/".$this->getProject()->getName();
         $resultString = shell_exec($commande);
+
+
         $result = simplexml_load_string($resultString);
 
         $this->repport = $result;
