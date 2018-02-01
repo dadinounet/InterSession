@@ -15,18 +15,6 @@ class TestPhpcpd extends Test
     const source = "Phpcpd";
 
 
-    /**
-     * TestPhpmetric constructor.
-     */
-    private function __construct()
-    {}
-
-    /**
-     * Prevent clonning object
-     */
-    private function __clone()
-    {}
-
 
     public static function newTestPHP(Project $project)
     {
