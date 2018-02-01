@@ -77,8 +77,7 @@ class Report
         return $report;
     }
 
-    public function 
-
+    
 
     /**
      * @return int
