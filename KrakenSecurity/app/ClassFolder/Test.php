@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB as database;
  */
 abstract class Test
 {
+
     /**
      * @var int
      */
@@ -59,13 +60,13 @@ abstract class Test
      *
      * @param string $source
      */
-    private function __construct()
+    protected function __construct()
     {
     }
     /**
      * Prevent clonning
      */
-    private function __clone()
+    protected function __clone()
     {
     }
 

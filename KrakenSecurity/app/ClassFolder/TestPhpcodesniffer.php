@@ -13,22 +13,6 @@ class TestPhpcodesniffer extends Test
 {
     const source = "Code sniffer";
 
-    /**
-     * TestPhpmetric constructor.
-     */
-    private function __construct()
-    {
-
-    }
-
-    /**
-     * Prevent clonning object
-     */
-    private function __clone()
-    {
-
-    }
-
 
     public static function newTestPHP(Project $project)
     {

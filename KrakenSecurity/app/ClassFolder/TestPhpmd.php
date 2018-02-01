@@ -22,22 +22,6 @@ class TestPhpmd extends Test
     const validRules = array("codesize","cleancode","controversial","design","naming","unusedcode" );
 
 
-    /**
-     * TestPhpmetric constructor.
-     */
-    private function __construct()
-    {
-
-    }
-
-    /**
-     * Prevent clonning object
-     */
-    private function __clone()
-    {
-
-    }
-
 
     public static function newTestPHP(Project $project)
     {

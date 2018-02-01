@@ -14,24 +14,6 @@ class TestPhploc extends Test
     const fileReportName = "LOGXML_PHPLOC";
     const source = "Phploc";
 
-
-    /**
-     * TestPhpmetric constructor.
-     */
-    private function __construct()
-    {
-
-    }
-
-    /**
-     * Prevent clonning object
-     */
-    private function __clone()
-    {
-
-    }
-
-
     public static function newTestPHP(Project $project)
     {
         $test = new self();
