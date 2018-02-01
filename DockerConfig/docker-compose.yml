@@ -1,31 +1,51 @@
 version: '2'
 services:
-  db:
-    image: mysql:5.7
-    volumes:
-      - dbdata:/var/lib/mysql
-    environment:
-      - "MYSQL_DATABASE=kraken"
-      - "MYSQL_USER=kraken"
-      - "MYSQL_PASSWORD=kraken"
-      - "MYSQL_ROOT_PASSWORD=kraken"
-    ports:
-      - "3306:3306"
-  app:
+  # db:
+  #   image: mysql:5.7
+  #   volumes:
+  #     - dbdata:/var/lib/mysql
+  #   environment:
+  #     - "MYSQL_DATABASE=kraken"
+  #     - "MYSQL_USER=kraken"
+  #     - "MYSQL_PASSWORD=kraken"
+  #     - "MYSQL_ROOT_PASSWORD=kraken"
+  #   ports:
+  #     - "3306:3306"
+  # app:
+  #   build:
+  #     context: ./dockerFiles/app
+  #     dockerfile: app.dockerfile
+  #   working_dir: /var/www
+  #   volumes:
+  #     - ../KrakenSecurity:/var/www/KrakenSecurity
+  #   ports:
+  #     - "8080:80"
+  #   links:
+  #     - "db:db"
+  #     - "postfix"
+  # composer:
+  #   restart: 'no'
+  #   image: composer:latest
+  #   command: install
+  #   volumes_from:
+  #       - app
+  #   working_dir: /var/www/KrakenSecurity
+  # postfix:
+  #   image: catatnight/postfix
+  #   environment:
+  #     - maildomain=it-squad.fr
+  #     - smtp_user=user:pass
+  #   expose:
+  #     - 25:25
+  meteor:
     build:
-      context: ./dockerFiles/app
-      dockerfile: app.dockerfile
+      context: ./dockerFiles/meteor
+      dockerfile: meteor.dockerfile
     working_dir: /var/www
     volumes:
       - ../KrakenSecurity:/var/www/KrakenSecurity
-    ports:
-      - "8080:80"
-  composer:
-    restart: 'no'
-    image: composer:latest
-    command: install
-    volumes_from:
-        - app
-    working_dir: /var/www/KrakenSecurity
+    # links:
+    #   - "db:db"
+    #   - "postfix"
 volumes:
   dbdata:
