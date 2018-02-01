@@ -11,56 +11,40 @@ namespace App\ClassFolder;
 
 class TestPhpcpd extends Test
 {
-    private $repport;
+    const fileReportName = "LOGXML_PHPCPD";
+    const source = "Phpcpd";
 
-
-    /**
-     * TestPhpmetric constructor.
-     */
-    private function __construct()
-    {}
-
-    /**
-     * Prevent clonning object
-     */
-    private function __clone()
-    {}
 
 
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test->setSource('Phpcpd');
-        $test = parent::newTest($project, $test);
+        $test->setSource(TestPhpcpd::source);
+        $test = parent::newTest($project, $test,TestPhpcpd::source);
+        return $test;
+    }
+
+    public static function getTestFromDatas(Project $project, $datas)
+    {
+        $test = new self();
+        $test = parent::newTestFromDatas($project, $test, $datas);
         return $test;
     }
 
 
     public function getCommande($parameter = null)
     {
-        return "php ../vendor/bin/phpcpd ".Project::repoTesting."/".$this->getProject()->getName();
+        return "php ../vendor/bin/phpcpd --log-pmd=".Project::repoTesting."/".$this->getProject()->getName()."/".TestPhpcpd::fileReportName." ".Project::repoTesting."/".$this->getProject()->getName();
     }
-
-
 
     /**
      * @return mixed
      */
-    public function getRepport()
+    public function getReportXML()
     {
-        if(is_null($this->repport))
-        {
-            $this->editReport();
-        }
-        return $this->repport;
-    }
+        $file = fopen(Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhpcpd::fileReportName, "r");
+        $export = fread($file,filesize(Project::repoTesting."/".$this->getProject()->getName()."/".TestPhpcpd::fileReportName));
+        return(simplexml_load_string($export));
 
-/*
-composer require --dev sebastian/phpcpd*/
-
-    private function defineReport()
-    {
-
-        $this->repport = shell_exec($commande);
     }
 }

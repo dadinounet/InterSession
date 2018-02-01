@@ -14,36 +14,18 @@ class TestPhploc extends Test
     const fileReportName = "LOGXML_PHPLOC";
     const source = "Phploc";
 
-
-    /**
-     * TestPhpmetric constructor.
-     */
-    private function __construct()
-    {
-
-    }
-
-    /**
-     * Prevent clonning object
-     */
-    private function __clone()
-    {
-
-    }
-
-
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test->setSource(TestPhploc::source);
-        $test = parent::newTest($project, $test);
+        $test = parent::newTest($project, $test, TestPhploc::source);
         return $test;
     }
 
-    public function addReport(Report $report, $parameter = null)
+    public static function getTestFromDatas(Project $project, $datas)
     {
-        parent::addReport($report, $parameter);
-
+        $test = new self();
+        $test = parent::newTestFromDatas($project, $test, $datas);
+        return $test;
     }
 
 
@@ -59,10 +41,10 @@ class TestPhploc extends Test
     }
 
 
+
+
     public function getCommande($parameter = null)
     {
-        //php ./vendor/bin/phploc --log-xml=/var/www/TestingArea/warhammerSymfo/LOG-XML /var/www/TestingArea/warhammerSymfo
-
         return "php ../vendor/bin/phploc --log-xml=".Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhploc::fileReportName." ".Project::repoTesting."/".$this->getProject()->getName();
     }
 

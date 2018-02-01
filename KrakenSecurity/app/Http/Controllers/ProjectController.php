@@ -15,32 +15,41 @@ use App\ClassFolder\TestPhpcodesniffer;
 use App\ClassFolder\TestPhploc;
 use App\ClassFolder\TestPhpmd;
 use App\ClassFolder\TestPhpmetric;
+use App\ClassFolder\TestPHPmnd;
 
 class ProjectController extends Controller
 {
     public function test()
     {
-        //$git = "https://github.com/kedorev/warhammerSymfo.git";
-        $git = "https://github.com/sebastianbergmann/phploc.git";
+        $git = "https://github.com/kedorev/warhammerSymfo.git";
+        //$git = "https://github.com/sebastianbergmann/phploc.git";
         $project = Project::newProject($git);
         $project->cloneProject();
+
         $phpmdTest = TestPhpmd::newTestPHP($project);
-        //dump($phpmdTest->getSource());
         $testCpd = TestPhpcpd::newTestPHP($project);
         $testPHPloc = TestPhploc::newTestPHP($project);
-        $reportMD = Report::newReport($phpmdTest, "codesize");
 
+        $testSniffer = TestPhpcodesniffer::newTestPHP($project);
+        $testMnd = TestPHPmnd::newTestPHP($project);
 
-
+        $reportMDcodesize = Report::newReport($phpmdTest, "codesize");
+        $reportMDcleancode = Report::newReport($phpmdTest, "cleancode");
         $reportPhploc = Report::newReport($testPHPloc);
         $reportcpd = Report::newReport($testCpd);
-         $phploc->getReport();
+
+        /*$phploc->getReport();
         $phploc->getJson();
-        dump($project);
+        dump($project);*/
+
+        $reportSnifer = Report::newReport($testSniffer);
+        $reportMND = Report::newReport($testMnd);
+
+
+
+
         dump($project);
 
-        //$phpmetricTest->getJson();
-        //Project::create($project, $git);
         die;
 
     }

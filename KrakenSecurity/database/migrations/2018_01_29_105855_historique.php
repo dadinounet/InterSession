@@ -35,7 +35,7 @@ class Historique extends Migration
 
         Schema::create('reports', function(Blueprint $table) {
             $table->increments('id');
-            $table->text('report');
+            $table->longText('report');
             $table->integer('testId');
             $table->timestamps();
         });
@@ -49,5 +49,7 @@ class Historique extends Migration
     public function down()
     {
         Schema::dropIfExists('projects');
+        Schema::dropIfExists('tests');
+        Schema::dropIfExists('reports');
     }
 }
