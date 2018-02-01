@@ -11,32 +11,58 @@ namespace App\ClassFolder;
 
 class TestPhploc extends Test
 {
-    private $report;
+    const fileReportName = "LOGXML_PHPLOC";
+    const source = "Phploc";
 
-    public function __construct(Project $project)
+
+    /**
+     * TestPhpmetric constructor.
+     */
+    private function __construct()
     {
-        $this->setProject($project);
-        $this->setSource('Phploc');
-        $project->addTest($this);
+
     }
+
+    /**
+     * Prevent clonning object
+     */
+    private function __clone()
+    {
+
+    }
+
+
+    public static function newTestPHP(Project $project)
+    {
+        $test = new self();
+        $test = parent::newTest($project, $test, TestPhploc::source);
+        return $test;
+    }
+
+    public static function getTestFromDatas(Project $project, $datas)
+    {
+        $test = new self();
+        $test = parent::newTestFromDatas($project, $test, $datas);
+        return $test;
+    }
+
 
     /**
      * @return mixed
      */
-    public function getReport()
+    public function getReportXML()
     {
-        if(is_null($this->report))
-        {
-            $this->defineRepport();
-        }
-        return $this->report;
+        $file = fopen(Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhploc::fileReportName, "r");
+        $export = fread($file,filesize(Project::repoTesting."/".$this->getProject()->getName()."/".TestPhploc::fileReportName));
+        return(simplexml_load_string($export));
+
     }
 
 
-    private function defineRepport()
+    public function getCommande($parameter = null)
     {
-        $commande = "php ../vendor/bin/phploc ".Project::repoTesting."/".$this->getProject()->getName();
-        $this->report = shell_exec($commande);
+        return "php ../vendor/bin/phploc --log-xml=".Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhploc::fileReportName." ".Project::repoTesting."/".$this->getProject()->getName();
     }
-    //
+
+
 }

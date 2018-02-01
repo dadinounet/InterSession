@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\ClassFolder\Project;
+use App\ClassFolder\Report;
 use App\ClassFolder\TestPhpcpd;
 use App\ClassFolder\TestPhpcodesniffer;
 use App\ClassFolder\TestPhploc;
@@ -19,24 +20,35 @@ class ProjectController extends Controller
 {
     public function test()
     {
-        $project = new Project("https://github.com/kedorev/warhammerSymfo.git");
+        //$git = "https://github.com/kedorev/warhammerSymfo.git";
+        $git = "https://github.com/sebastianbergmann/phploc.git";
+        $project = Project::newProject($git);
         $project->cloneProject();
-        $phpmdTest = new TestPhpmd($project);
-        $phpmetricTest = new TestPhpmetric($project);
-        $testCpd = new TestPhpcpd($project);
-        $testCS = new TestPhpcodesniffer($project);
-        $phploc = new TestPhploc($project);
-        $phpmdTest->getCleanCodeRepport();
-        $phpmdTest->getCodeSizeRepport();
-        $phpmdTest->getControversialRepport();
-        $phpmdTest->getDesignRepport();
-        $phpmdTest->getNamingRepport();
-        $phpmdTest->getUnusedcodeRepport();
-        $testCpd->getRepport();
-        $testCS->getRepport();
-        $phploc->getReport();
+
+        $phpmdTest = TestPhpmd::newTestPHP($project);
+        $testCpd = TestPhpcpd::newTestPHP($project);
+        $testPHPloc = TestPhploc::newTestPHP($project);
+        $testSniffer = TestPhpcodesniffer::newTestPHP($project);
+
+        $reportMDcodesize = Report::newReport($phpmdTest, "codesize");
+        $reportMDcleancode = Report::newReport($phpmdTest, "cleancode");
+        $reportPhploc = Report::newReport($testPHPloc);
+        $reportcpd = Report::newReport($testCpd);
+        $reportSnifer = Report::newReport($testSniffer);
+
+
+
         dump($project);
-        $phpmetricTest->getJson();
+
         die;
+
+    }
+
+    public function getProject($id)
+    {
+        $projet = Project::getProjectById(intval($id));
+        dump($projet);
+        die;
+
     }
 }

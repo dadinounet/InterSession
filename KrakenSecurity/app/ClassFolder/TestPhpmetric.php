@@ -30,14 +30,10 @@ class TestPhpmetric extends Test
         $project->addTest($this);
     }
 
-    /**
-     *
-     */
-    public function getJson()
+
+    public function getCommande($parameter = null)
     {
-        $commande = "php ../vendor/bin/phpmetrics --report-json=".Project::repoTesting."/".$this->getProject()->getName()."/phpmetric.json ".Project::repoTesting."/".$this->getProject()->getName();
-        var_dump($commande);
-        shell_exec($commande);
+        return "php ../vendor/bin/phpmetrics --report-json=".Project::repoTesting."/".$this->getProject()->getName()."/phpmetric.json ".Project::repoTesting."/".$this->getProject()->getName();
     }
 }
 
