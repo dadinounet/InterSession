@@ -16,6 +16,7 @@ use App\ClassFolder\TestPhploc;
 use App\ClassFolder\TestPhpmd;
 use App\ClassFolder\TestPhpmetric;
 use App\ClassFolder\TestPHPmnd;
+use App\ClassFolder\TestSecurityChecker;
 
 class ProjectController extends Controller
 {
@@ -31,6 +32,7 @@ class ProjectController extends Controller
         $testPHPloc = TestPhploc::newTestPHP($project);
         $testSniffer = TestPhpcodesniffer::newTestPHP($project);
         $testMnd = TestPHPmnd::newTestPHP($project);
+        $composerLock = TestSecurityChecker::newTestPHP($project);
 
         $reportMDcodesize = Report::newReport($phpmdTest, "codesize");
         $reportMDcleancode = Report::newReport($phpmdTest, "cleancode");
@@ -38,6 +40,7 @@ class ProjectController extends Controller
         $reportcpd = Report::newReport($testCpd);
         $reportSnifer = Report::newReport($testSniffer);
         $reportMND = Report::newReport($testMnd);
+        $reportSecurityChecker = Report::newReport($composerLock);
 
 
 
@@ -53,5 +56,12 @@ class ProjectController extends Controller
         dump($projet);
         die;
 
+    }
+
+
+    public function mail()
+    {
+        $projet = Project::getProjectById(1);
+        $projet->sendStarterMail('kedorev@gmail.com');
     }
 }

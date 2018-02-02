@@ -60,7 +60,7 @@ class Report
         {
             $report->report = $test->getReportXML();
         }
-        if($test->getSource() == TestPhpmd::source)
+        if($test->getSource() == TestPhpmd::source || $test->getSource() == TestSecurityChecker::source )
         {
             $report->report = simplexml_load_string($report->report);
         }
