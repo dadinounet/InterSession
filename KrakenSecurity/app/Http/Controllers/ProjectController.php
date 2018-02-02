@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\ClassFolder\Project;
 use App\ClassFolder\Report;
+use App\ClassFolder\Test;
 use App\ClassFolder\TestPhpcpd;
 use App\ClassFolder\TestPhpcodesniffer;
 use App\ClassFolder\TestPhploc;
@@ -70,5 +71,11 @@ class ProjectController extends Controller
     {
         $projet = Project::getProjectById(1);
         $projet->sendStarterMail('kedorev@gmail.com');
+    }
+
+
+    public function allTests()
+    {
+        echo Test::getJSONAllTest();
     }
 }

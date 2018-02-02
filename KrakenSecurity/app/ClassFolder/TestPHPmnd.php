@@ -12,6 +12,7 @@ namespace App\ClassFolder;
 class TestPHPmnd extends Test
 {
     const source = "Phpmnd";
+    const idSource = 5;
 
     public function getCommande($parameter = null)
     {
@@ -24,7 +25,7 @@ class TestPHPmnd extends Test
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test = parent::newTest($project, $test, TestPHPmnd::source);
+        $test = parent::newTest($project, $test, TestPHPmnd::source, TestPHPmnd::idSource);
         return $test;
     }
 

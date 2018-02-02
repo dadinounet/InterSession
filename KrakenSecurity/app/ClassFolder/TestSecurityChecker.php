@@ -12,12 +12,13 @@ namespace App\ClassFolder;
 class TestSecurityChecker extends Test
 {
     const source = "Security Check";
+    const idSource = 6;
 
 
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test = parent::newTest($project, $test, TestSecurityChecker::source);
+        $test = parent::newTest($project, $test, TestSecurityChecker::source, TestSecurityChecker::idSource);
         return $test;
     }
 
