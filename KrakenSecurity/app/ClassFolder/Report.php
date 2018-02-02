@@ -49,6 +49,8 @@ class Report
     private function __clone()
     {}
 
+
+
     public static function newReport(Test $test, string $parameter = null)
     {
         $report = new self();
@@ -56,13 +58,48 @@ class Report
         $test->addReport($report, $parameter);
         $report->commande = $test->getCommande($parameter);
         $report->report = shell_exec($report->getCommande());
+
         if($test->getSource() == TestPhploc::source || $test->getSource() == TestPhpcpd::source)
         {
             $report->report = $test->getReportXML();
         }
-        if($test->getSource() == TestPhpmd::source)
+        if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source)
         {
             $report->report = simplexml_load_string($report->report);
+        }
+        if($test->getSource() == TestPHPmnd::source) {
+            $result = array();
+            $element = explode("--------------------------------------------------------------------------------\n", $report->report);
+            foreach ($element as $sub_elements) {
+                $lines = explode("\n", $sub_elements);
+                $size_lines = sizeof($lines);
+                for ($i = 0; $i < $size_lines; $i++) {
+                    if ($lines[$i] != "" && $i > 0) {
+                        $header="";
+                        $head = substr($lines[$i], 0, 3);
+                        if ($head != "  >" && $head != "Tot" && $head != "Tim") {
+                            $header = strstr($lines[$i], '.', true) . ".php";
+                            //dump($header);
+                            //$magicnumber = $lines[$i];
+                        }
+                        if ($head == "  >") {
+                            $header = "codeline";
+                        }
+                        if ($head == "Tot") {
+                            $header = "total";
+                        }
+                        if ($head == "Tim") {
+                            $header = "time";
+                        }
+                        $temp = array($header => $lines[$i]);
+                        //dump($temp);
+                        array_push($result, $temp);
+                        //$result = array_merge($result, $temp);
+                    }
+                }
+
+            }
+            $report->report = $result;
         }
 
         $report->setCreatedAt(now());
@@ -78,6 +115,43 @@ class Report
     }
 
     
+
+    public function getReportJson()
+    {
+
+        $report = $this->report;
+        $type = getType($report);
+        /*if ($type != "object"){
+            $report_to_JSON = json_decode($report);
+        }
+        else{
+            $report_to_JSON = json_encode($report);
+        }*/
+        //dump("test report to JSON");
+        //dump($report);
+
+       /* dump(getType($this->getReport()));
+        dump(getType($this->getTest()));*/
+       //$test = $this->getTest();
+       //dump($test->getReports());
+       //$report =
+        /*$report = $this->getReport();
+        $typetest = getType($report);
+        if($typetest =! "object"){
+            $report_xml = simplexml_load_string($report);
+            //$return =  $report_xml->asXML();
+            dump($report_xml);
+        }
+        else {
+            $return = $report;
+        }
+
+        //dump($return);
+        dump($typetest);*/
+        $report_to_JSON = json_encode($report);
+        dump($report_to_JSON);
+        return $report_to_JSON;
+    }
 
     /**
      * @return int
@@ -116,7 +190,15 @@ class Report
      */
     public function getReport(): string
     {
-        return $this->report;
+        /*if($this->getTest()->getSource() == TestPhploc::source)
+        {
+            $return =  $this->report->asXML();
+        }
+        else
+        {*/
+        $return = $this->report;
+        //}
+        return $return;
     }
 
     /**

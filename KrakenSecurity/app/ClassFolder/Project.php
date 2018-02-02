@@ -90,8 +90,10 @@ class Project
     public function cloneProject()
     {
         $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
+        //dump($this->getRepoGit());
+        //dump($commande);
         $this->createFolder();
-        $return = shell_exec($commande);
+        shell_exec($commande);
 
     }
     /**
@@ -249,6 +251,25 @@ class Project
         $project->setUpdatedAt($data->updated_at);
         Test::getTestByProject($project);
         return $project;
+    }
+
+    public function getProjectJson()
+    {
+        $result = array();
+        $name_project=$this->name;
+        foreach ($this->tests as $test){
+            //dump(json_encode($report));
+            $report_to_JSON = json_decode($test->getTestJson());
+            //array_push($result, $report_to_JSON);
+            $temp_array = array($name_project => $report_to_JSON);
+            array_push($result, $temp_array);
+        }
+        //dump("test gettestJSON");
+        //dump($result);
+        /*$result_To_Json = json_encode($result);
+        dump($result_To_Json);*/
+        $result_to_JSON = json_encode($result);
+        return $result_to_JSON;
     }
 }
 

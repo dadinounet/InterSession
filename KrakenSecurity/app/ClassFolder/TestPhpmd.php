@@ -49,5 +49,6 @@ class TestPhpmd extends Test
             throw new \LogicException("Rules ".$parameter." not found");
         }
     }
+
 }
 

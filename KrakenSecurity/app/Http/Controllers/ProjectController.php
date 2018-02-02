@@ -21,6 +21,8 @@ class ProjectController extends Controller
 {
     public function test()
     {
+
+        $paramaters = array("codesize","cleancode","controversial","design","naming","unusedcode" );
         $git = "https://github.com/kedorev/warhammerSymfo.git";
         //$git = "https://github.com/sebastianbergmann/phploc.git";
         $project = Project::newProject($git);
@@ -29,26 +31,31 @@ class ProjectController extends Controller
         $phpmdTest = TestPhpmd::newTestPHP($project);
         $testCpd = TestPhpcpd::newTestPHP($project);
         $testPHPloc = TestPhploc::newTestPHP($project);
-
         $testSniffer = TestPhpcodesniffer::newTestPHP($project);
         $testMnd = TestPHPmnd::newTestPHP($project);
+        //dump($testPHPloc->getTestJson());
+        foreach ($paramaters as $paramater){
+            $reportMD = Report::newReport($phpmdTest, $paramater);
+            //dump(getType($reportMD));
+            //$reportMD->getReportJson();
+        }
+        //$reportMD = Report::newReport($phpmdTest, "codesize");
 
         $reportMDcodesize = Report::newReport($phpmdTest, "codesize");
         $reportMDcleancode = Report::newReport($phpmdTest, "cleancode");
         $reportPhploc = Report::newReport($testPHPloc);
+        //$reportPhploc->getReportJson();
         $reportcpd = Report::newReport($testCpd);
-
-        /*$phploc->getReport();
-        $phploc->getJson();
-        dump($project);*/
-
+        //$reportcpd->getReportJson();
         $reportSnifer = Report::newReport($testSniffer);
         $reportMND = Report::newReport($testMnd);
+        $reportMND->getReportJson();
+        //$testPHPloc->getTestJson();
+        //$testSniffer->getTestJson();
+        $testMnd->getTestJson();
+        //dump(getType($project));
 
-
-
-
-        dump($project);
+        dump($project->getProjectJson());
 
         die;
 
@@ -62,4 +69,6 @@ class ProjectController extends Controller
         die;
 
     }
+
+
 }
