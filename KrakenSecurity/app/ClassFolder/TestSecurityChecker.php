@@ -31,6 +31,7 @@ class TestSecurityChecker extends Test
 
     public function getCommande($parameter = null)
     {
-        return "php ../security-checker.phar security:check ".Project::repoTesting."/".$this->getProject()->getName().$parameter."/composer.lock";
+        return "curl -H \"Accept: application/json\" https://security.sensiolabs.org/check_lock -F lock=@".Project::repoTesting."/".$this->getProject()->getName().$parameter."/composer.lock";
+        //return "php ../security-checker.phar security:check ".Project::repoTesting."/".$this->getProject()->getName().$parameter."/composer.lock";
     }
 }

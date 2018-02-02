@@ -44,6 +44,13 @@ class ProjectController extends Controller
 
 
 
+        foreach ($project->getTests() as $test)
+        {
+            if($test->getSource() == TestSecurityChecker::source)
+            {
+                dump($test->getReports());
+            }
+        }
         dump($project);
 
         die;
