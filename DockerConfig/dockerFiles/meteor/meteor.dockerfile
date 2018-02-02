@@ -8,10 +8,10 @@ RUN /bin/bash -c " NVM_DIR=\"/usr/bin/.nvm\" && echo $NVM_DIR && ls -la $HOME/.n
 RUN /bin/bash -c "chmod 755 -R /usr/bin/.nvm && /usr/bin/.nvm/nvm.sh install 8.9.4 && /usr/bin/.nvm/nvm.sh use 8.9.4 && /usr/bin/.nvm/nvm.sh alias default 8.9.4 && /usr/bin/.nvm/nvm.sh use default \
     && npm install -g express && npm link express \
     && mkdir /var/www && cd /var/www \
-    && curl https://install.meteor.com/ | sh \ 
-    && npm install \
-    && meteor update --allow-superuser \
-    && meteor npm install --save @babel/runtime \
+    && git clone https://github.com/dadinounet/InterSessionFront.git && cd InterSessionFront"
+RUN /bin/bash -c "cd /var/www/InterSessionFront && curl https://install.meteor.com/ | bash"
+RUN /bin/bash -c "cd /var/www/InterSessionFront && npm install"
+RUN /bin/bash -c "cd /var/www/InterSessionFront && meteor update --allow-superuser \
     && meteor --allow-superuser"
     # gitclone ?
 
