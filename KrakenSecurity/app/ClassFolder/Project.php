@@ -103,10 +103,10 @@ class Project
     public function cloneProject()
     {
         $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
+        //dump($commande);
 
         $this->createFolder();
-
-        $return = shell_exec($commande);
+        /*$return = shell_exec($commande);*/
 
     }
 
@@ -132,9 +132,11 @@ class Project
     {
         if($this->getFolder() == 0)
         {
+            $path = Project::repoTesting."/".$this->getName();
+            dump($path);
             try
             {
-                mkdir(Project::repoTesting."/".$this->getName());
+                mkdir($path);
 
             }
             catch (\Error $e)
@@ -191,13 +193,6 @@ class Project
         $project->created_at = now();
         $project->updated_at = now();
         $project->setName($arraySplitRepoGit[0]);
-        $id =  DB::table('projects')->insertGetId([
-            "repoGit" => $project->getRepoGit(),
-            "name" => $project->getName(),
-            "updated_at" => $project->created_at,
-            "created_at" => $project->updated_at,
-        ]);
-        $project->setId($id);
         return $project;
     }
 
@@ -212,6 +207,19 @@ class Project
         {
             $test->update();
         }
+    }
+
+
+    public function save()
+    {
+
+        $id =  DB::table('projects')->insertGetId([
+            "repoGit" => $this->getRepoGit(),
+            "name" => $this->getName(),
+            "updated_at" => $this->created_at,
+            "created_at" => $this->updated_at,
+        ]);
+        $this->setId($id);
     }
 
     private function setId(int $id)

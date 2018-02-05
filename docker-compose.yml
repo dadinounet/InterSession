@@ -46,6 +46,11 @@ services:
         - app
     working_dir: /var/www/KrakenSecurity
 
+  redis:
+    image: redis
+    ports:
+        - "6379"
+
 volumes:
   dbdata:
 

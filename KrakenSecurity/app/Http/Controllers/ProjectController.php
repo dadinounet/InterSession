@@ -18,6 +18,8 @@ use App\ClassFolder\TestPhpmd;
 use App\ClassFolder\TestPhpmetric;
 use App\ClassFolder\TestPHPmnd;
 use App\ClassFolder\TestSecurityChecker;
+use App\Jobs\ProcessGitClone;
+use App\Jobs\ProcessReport;
 
 class ProjectController extends Controller
 {
@@ -26,9 +28,10 @@ class ProjectController extends Controller
         $git = "https://github.com/kedorev/warhammerSymfo.git";
         //$git = "https://github.com/sebastianbergmann/phploc.git";
         $project = Project::newProject($git);
-        $project->cloneProject();
+        $this->dispatch(new ProcessGitClone($project));
 
-        $phpmdTest = TestPhpmd::newTestPHP($project);
+
+        /*$phpmdTest = TestPhpmd::newTestPHP($project);
         $testCpd = TestPhpcpd::newTestPHP($project);
         $testPHPloc = TestPhploc::newTestPHP($project);
         $testSniffer = TestPhpcodesniffer::newTestPHP($project);
@@ -36,6 +39,7 @@ class ProjectController extends Controller
         $composerLock = TestSecurityChecker::newTestPHP($project);
 
         $reportMDcodesize = Report::newReport($phpmdTest, "codesize");
+        $this->dispatch(new ProcessReport($reportMDcodesize));
         $reportMDcleancode = Report::newReport($phpmdTest, "cleancode");
         $reportPhploc = Report::newReport($testPHPloc);
         $reportcpd = Report::newReport($testCpd);
@@ -52,9 +56,8 @@ class ProjectController extends Controller
                 dump($test->getReports());
             }
         }
-        dump($project);
+        dump($project);*/
 
-        die;
 
     }
 
