@@ -13,11 +13,12 @@ class TestPhploc extends Test
 {
     const fileReportName = "LOGXML_PHPLOC";
     const source = "Phploc";
+    const idSource = 3;
 
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test = parent::newTest($project, $test, TestPhploc::source);
+        $test = parent::newTest($project, $test, TestPhploc::source, TestPhploc::idSource);
         return $test;
     }
 

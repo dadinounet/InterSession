@@ -14,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * Class TestPhpmetric
  * @package App\ClassFolder
+ * @deprecated
  */
 class TestPhpmetric extends Test
 {

@@ -10,12 +10,14 @@ namespace App\Http\Controllers;
 
 use App\ClassFolder\Project;
 use App\ClassFolder\Report;
+use App\ClassFolder\Test;
 use App\ClassFolder\TestPhpcpd;
 use App\ClassFolder\TestPhpcodesniffer;
 use App\ClassFolder\TestPhploc;
 use App\ClassFolder\TestPhpmd;
 use App\ClassFolder\TestPhpmetric;
 use App\ClassFolder\TestPHPmnd;
+use App\ClassFolder\TestSecurityChecker;
 
 class ProjectController extends Controller
 {
@@ -31,6 +33,7 @@ class ProjectController extends Controller
         $testPHPloc = TestPhploc::newTestPHP($project);
         $testSniffer = TestPhpcodesniffer::newTestPHP($project);
         $testMnd = TestPHPmnd::newTestPHP($project);
+        $composerLock = TestSecurityChecker::newTestPHP($project);
 
         $reportMDcodesize = Report::newReport($phpmdTest, "codesize");
         $reportMDcleancode = Report::newReport($phpmdTest, "cleancode");
@@ -38,9 +41,17 @@ class ProjectController extends Controller
         $reportcpd = Report::newReport($testCpd);
         $reportSnifer = Report::newReport($testSniffer);
         $reportMND = Report::newReport($testMnd);
+        $reportSecurityChecker = Report::newReport($composerLock);
 
 
 
+        foreach ($project->getTests() as $test)
+        {
+            if($test->getSource() == TestSecurityChecker::source)
+            {
+                dump($test->getReports());
+            }
+        }
         dump($project);
 
         die;
@@ -53,5 +64,18 @@ class ProjectController extends Controller
         dump($projet);
         die;
 
+    }
+
+
+    public function mail()
+    {
+        $projet = Project::getProjectById(1);
+        $projet->sendStarterMail('kedorev@gmail.com');
+    }
+
+
+    public function allTests()
+    {
+        echo Test::getJSONAllTest();
     }
 }

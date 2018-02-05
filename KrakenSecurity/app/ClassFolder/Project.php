@@ -10,6 +10,8 @@ namespace App\ClassFolder;
 
 
 
+use App\Mail\startTestMail;
+use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Parent_;
 use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 use Symfony\Component\Process\Exception\LogicException;
@@ -31,8 +33,6 @@ class Project
      * @var string
      */
     private $repoGit;
-
-
 
     /**
      * @var string
@@ -259,8 +259,6 @@ class Project
         $this->updated_at = $updated_at;
     }
 
-
-
     public static function getProjectById(int $id): ?Project
     {
         $data = DB::table('projects')->where('id', $id)->first();
@@ -273,6 +271,12 @@ class Project
         $project->setUpdatedAt($data->updated_at);
         Test::getTestByProject($project);
         return $project;
+    }
+
+
+    public function sendStarterMail(string $dest)
+    {
+        Mail::to($dest)->send(new startTestMail());
     }
 }
 

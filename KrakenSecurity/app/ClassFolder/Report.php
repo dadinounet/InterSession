@@ -60,9 +60,13 @@ class Report
         {
             $report->report = $test->getReportXML();
         }
-        if($test->getSource() == TestPhpmd::source)
+        else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source )
         {
             $report->report = simplexml_load_string($report->report);
+        }
+        else if($test->getSource() == TestSecurityChecker::source)
+        {
+            $report->report = json_decode($report->report);
         }
 
         $report->setCreatedAt(now());

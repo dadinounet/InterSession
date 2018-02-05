@@ -32,6 +32,11 @@ abstract class Test
     private $source;
 
     /**
+     * @var int
+     */
+    private $idSource;
+
+    /**
      * @var boolean
      */
     private $valide;
@@ -70,11 +75,12 @@ abstract class Test
     {
     }
 
-    protected static function newTest(Project $project, Test $test, string $source) :Test
+    protected static function newTest(Project $project, Test $test, string $source, int $idSource) :Test
     {
         $test->reports = array();
         $test->setProject($project);
         $test->setSource($source);
+        $test->setIdSource($idSource);
         $project->addTest($test);
         $test->setUpdatedAt(now());
         $test->setCreatedAt(now());
@@ -149,6 +155,22 @@ abstract class Test
     public function setSource(string $source)
     {
         $this->source = $source;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIdSource(): int
+    {
+        return $this->idSource;
+    }
+
+    /**
+     * @param int $idSource
+     */
+    public function setIdSource(int $idSource): void
+    {
+        $this->idSource = $idSource;
     }
 
     /**
@@ -270,5 +292,25 @@ abstract class Test
     }
 
 
+    protected static function getJsonTestDetails(string $source, int $sourceId)
+    {
+        return [
+            "source" => $source,
+            "id" => $sourceId
+        ];
+    }
+
+    static public function getJSONAllTest()
+    {
+        $json = array();
+        array_push($json,TestPHPmnd::getJsonTestDetails(TestPHPmnd::source, TestPHPmnd::idSource));
+        array_push($json,TestPhpcodesniffer::getJsonTestDetails(TestPhpcodesniffer::source, TestPhpcodesniffer::idSource));
+        array_push($json,TestSecurityChecker::getJsonTestDetails(TestSecurityChecker::source, TestSecurityChecker::idSource));
+        array_push($json,TestPhploc::getJsonTestDetails(TestPhploc::source, TestPhploc::idSource));
+        array_push($json,TestPhpcpd::getJsonTestDetails(TestPhpcpd::source, TestPhpcpd::idSource));
+        array_push($json,TestPhpmd::getJsonTestDetails(TestPhpmd::source, TestPhpmd::idSource));
+
+        return json_encode($json);
+    }
 }
 
