@@ -255,15 +255,17 @@ class Project
 
     public function getProjectJson()
     {
-        $result = array();
+        //$result = array();
+        $tests_results = array();
         $name_project=$this->name;
         foreach ($this->tests as $test){
             //dump(json_encode($report));
             $report_to_JSON = json_decode($test->getTestJson());
             //array_push($result, $report_to_JSON);
-            $temp_array = array($name_project => $report_to_JSON);
-            array_push($result, $temp_array);
+            $temp_array = array($report_to_JSON);
+            array_push($tests_results, $temp_array);
         }
+        $result = array($name_project => $tests_results);
         //dump("test gettestJSON");
         //dump($result);
         /*$result_To_Json = json_encode($result);
