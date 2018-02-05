@@ -59,10 +59,10 @@ class PassportController
         }
     }
 
-    /*public function getDetails(){
+    public function getDetails(){
         $user = Auth::user();
         return response()->json(['success' => $user],$this->successStatus);
-    }*/
+    }
 
     public function disconnect(){
         $user = Auth::user();
