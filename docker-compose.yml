@@ -3,11 +3,12 @@ services:
 
   app:
     build:
-      context: ./DockerConfig/
+      context: ./
       dockerfile: app.dockerfile
     working_dir: /var/www
     volumes:
-      - ./KrakenSecurity/:/var/www
+      - ./KrakenSecurity:/var/www
+      - ./TestingArea:/var/testing
     environment:
       - "DB_PORT=3306"
       - "DB_HOST=db"
@@ -16,7 +17,7 @@ services:
 
   web:
     build:
-      context: ./DockerConfig/
+      context: ./
       dockerfile: web.dockerfile
     working_dir: /var/www
     volumes_from:
@@ -42,9 +43,9 @@ services:
     image: composer:latest
     command: install
     volumes_from:
-      - app
+        - app
     working_dir: /var/www/KrakenSecurity
-
 
 volumes:
   dbdata:
+

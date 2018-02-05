@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-ROUTE::get('/test', function(){
-    echo "test";
-});
+Route::get('/test', 'ProjectController@test');
+Route::get('/getProject/{id}', 'ProjectController@getProject')->where('id', '[0-9]+');
+Route::get('/mail', 'ProjectController@mail');
+
