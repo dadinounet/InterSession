@@ -63,11 +63,15 @@ class Report
         {
             $report->report = $test->getReportXML();
         }
-        if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source)
+        else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source)
         {
             $report->report = simplexml_load_string($report->report);
         }
-        if($test->getSource() == TestPHPmnd::source) {
+        else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source )
+        {
+            $report->report = simplexml_load_string($report->report);
+        }
+        else if($test->getSource() == TestPHPmnd::source) {
             $result = array();
             $element = explode("--------------------------------------------------------------------------------\n", $report->report);
             foreach ($element as $sub_elements) {
@@ -75,24 +79,21 @@ class Report
                 $size_lines = sizeof($lines);
                 for ($i = 0; $i < $size_lines; $i++) {
                     if ($lines[$i] != "" && $i > 0) {
-                        $header="";
+                        $header = "";
                         $head = substr($lines[$i], 0, 3);
                         if ($head != "  >" && $head != "Tot" && $head != "Tim") {
                             $header = strstr($lines[$i], '.', true) . ".php";
-                            //dump($header);
-                            //$magicnumber = $lines[$i];
                         }
-                        if ($head == "  >") {
+                        else if ($head == "  >") {
                             $header = "codeline";
                         }
-                        if ($head == "Tot") {
+                        else if ($head == "Tot") {
                             $header = "total";
                         }
-                        if ($head == "Tim") {
+                        else if ($head == "Tim") {
                             $header = "time";
                         }
                         $temp = array($header => $lines[$i]);
-                        //dump($temp);
                         array_push($result, $temp);
                         //$result = array_merge($result, $temp);
                     }
@@ -100,6 +101,10 @@ class Report
 
             }
             $report->report = $result;
+        }
+        else if($test->getSource() == TestSecurityChecker::source)
+        {
+            $report->report = json_decode($report->report);
         }
 
         $report->setCreatedAt(now());

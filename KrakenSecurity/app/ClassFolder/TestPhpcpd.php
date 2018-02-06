@@ -13,13 +13,13 @@ class TestPhpcpd extends Test
 {
     const fileReportName = "LOGXML_PHPCPD";
     const source = "Phpcpd";
+    const idSource = 2;
 
     public static function newTestPHP(Project $project)
     {
         $test = new self();
         $test->setSource(TestPhpcpd::source);
-
-        $test = parent::newTest($project, $test,TestPhpcpd::source);
+        $test = parent::newTest($project, $test,TestPhpcpd::source, TestPhpcpd::idSource);
         return $test;
     }
 

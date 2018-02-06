@@ -10,6 +10,8 @@ namespace App\ClassFolder;
 
 
 
+use App\Mail\startTestMail;
+use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Parent_;
 use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 use Symfony\Component\Process\Exception\LogicException;
@@ -28,6 +30,7 @@ class Project
      * @var string
      */
     private $repoGit;
+
     /**
      * @var string
      */
@@ -253,25 +256,26 @@ class Project
         return $project;
     }
 
+
     public function getProjectJson()
     {
-        //$result = array();
         $tests_results = array();
-        $name_project=$this->name;
-        foreach ($this->tests as $test){
-            //dump(json_encode($report));
+        $name_project = $this->name;
+        foreach ($this->tests as $test) {
             $report_to_JSON = json_decode($test->getTestJson());
-            //array_push($result, $report_to_JSON);
             $temp_array = array($report_to_JSON);
             array_push($tests_results, $temp_array);
         }
         $result = array($name_project => $tests_results);
-        //dump("test gettestJSON");
-        //dump($result);
-        /*$result_To_Json = json_encode($result);
-        dump($result_To_Json);*/
         $result_to_JSON = json_encode($result);
         return $result_to_JSON;
+    }
+
+
+    public function sendStarterMail(string $dest)
+    {
+        Mail::to($dest)->send(new startTestMail());
+
     }
 }
 

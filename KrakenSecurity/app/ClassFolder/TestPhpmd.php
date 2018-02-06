@@ -18,6 +18,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class TestPhpmd extends Test
 {
     const source = "Phpmd";
+    const idSource = 4;
 
     const validRules = array("codesize","cleancode","controversial","design","naming","unusedcode" );
 
@@ -26,7 +27,7 @@ class TestPhpmd extends Test
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test = parent::newTest($project, $test, TestPhpmd::source);
+        $test = parent::newTest($project, $test, TestPhpmd::source, TestPhpmd::idSource);
         return $test;
     }
 

@@ -12,12 +12,13 @@ namespace App\ClassFolder;
 class TestPhpcodesniffer extends Test
 {
     const source = "Code sniffer";
+    const idSource = 1;
 
 
     public static function newTestPHP(Project $project)
     {
         $test = new self();
-        $test = parent::newTest($project, $test, TestPhpcodesniffer::source);
+        $test = parent::newTest($project, $test, TestPhpcodesniffer::source, TestPhpcodesniffer::idSource);
         return $test;
     }
 
@@ -33,6 +34,5 @@ class TestPhpcodesniffer extends Test
     {
         return "php ../vendor/bin/phpcs --report=xml ".Project::repoTesting."/".$this->getProject()->getName();
     }
-
 
 }
