@@ -21,14 +21,11 @@ class Project
 {
     const path = "/var/www/";
     const repoTesting = Project::path.'TestingArea';
-
-
-
+  
     /**
      * @var integer
      */
     protected $id;
-
     /**
      * @var string
      */
@@ -38,12 +35,10 @@ class Project
      * @var string
      */
     private $name;
-
     /**
      * @var array[test]
      */
     private $tests;
-
 
     /**
      * @var
@@ -71,7 +66,6 @@ class Project
     {
         return $this->repoGit;
     }
-
     /**
      * @param string $repoGit
      */
@@ -79,7 +73,6 @@ class Project
     {
         $this->repoGit = $repoGit;
     }
-
     /**
      * @return string
      */
@@ -87,7 +80,6 @@ class Project
     {
         return $this->name;
     }
-
     /**
      * @param string $name
      */
@@ -95,22 +87,18 @@ class Project
     {
         $this->name = $name;
     }
-
-
     /**
      * Clone the repo git in testing folder.
      */
     public function cloneProject()
     {
         $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
-
+        //dump($this->getRepoGit());
+        //dump($commande);
         $this->createFolder();
-
-        $return = shell_exec($commande);
+        shell_exec($commande);
 
     }
-
-
     /**
      * @return bool
      */
@@ -126,8 +114,7 @@ class Project
             return 0;
         }
     }
-
-
+  
     private function createFolder()
     {
         if($this->getFolder() == 0)
@@ -135,7 +122,6 @@ class Project
             try
             {
                 mkdir(Project::repoTesting."/".$this->getName());
-
             }
             catch (\Error $e)
             {
@@ -144,13 +130,11 @@ class Project
             }
         }
     }
-
     public function removeProjectTestingArea()
     {
         $commande = "rm -rf ".Project::repoTesting."/".$this->getName();
         shell_exec($commande);
     }
-
     /**
      * @return array
      */
@@ -158,7 +142,6 @@ class Project
     {
         return $this->tests;
     }
-
     /**
      * @param array $tests
      */
@@ -166,8 +149,6 @@ class Project
     {
         $this->tests = $tests;
     }
-
-
     public function addTest(Test $test)
     {
         foreach ($this->tests as $testProject)
@@ -201,6 +182,7 @@ class Project
         return $project;
     }
 
+  
     public function update()
     {
         DB::table('projects')->where('id', $this->id)->update([
@@ -214,6 +196,7 @@ class Project
         }
     }
 
+   
     private function setId(int $id)
     {
         $this->id = $id;
@@ -274,9 +257,25 @@ class Project
     }
 
 
+    public function getProjectJson()
+    {
+        $tests_results = array();
+        $name_project = $this->name;
+        foreach ($this->tests as $test) {
+            $report_to_JSON = json_decode($test->getTestJson());
+            $temp_array = array($report_to_JSON);
+            array_push($tests_results, $temp_array);
+        }
+        $result = array($name_project => $tests_results);
+        $result_to_JSON = json_encode($result);
+        return $result_to_JSON;
+    }
+
+
     public function sendStarterMail(string $dest)
     {
         Mail::to($dest)->send(new startTestMail());
+
     }
 }
 
