@@ -214,12 +214,11 @@ abstract class Test
         $this->project = $project;
     }
 
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
 
-    abstract public function getCommande($parameter = null);
-
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
@@ -231,11 +230,6 @@ abstract class Test
     public function setId(int $id): void
     {
         $this->id = $id;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->created_at;
     }
 
     /**
@@ -257,10 +251,27 @@ abstract class Test
         $this->updated_at = $updated_at;
     }
 
+    abstract public function getCommande($parameter = null);
+
+    public function getTestJson(){
+        $result = array();
+        $source_test=$this->source;
+        //dump($this);
+        foreach ($this->reports as $report){
+            //dump(json_encode($report));
+            $report_to_JSON = json_decode($report->getReportJson());
+            //array_push($result, $report_to_JSON);
+            $temp_array = array($source_test => $report_to_JSON);
+            $result = array_merge($result, $temp_array);
+        }
+        $result_to_JSON = json_encode($result);
+        dump($result_to_JSON);
+        return $result_to_JSON;
+
+    }
 
 
-
-    public static function getTestById(int $id, Test $test, Project $project = null)
+    /*public static function getTestById(int $id, Test $test, Project $project = null)
     {
         $data = database::table('tests')->where('id', $id)->first();
         $test->setId($id);
@@ -275,30 +286,23 @@ abstract class Test
         $datas = $query->get();
         foreach ($datas as $data) {
             $test = "";
-            if($data->source == TestPhpcpd::source)
-            {
+            if ($data->source == TestPhpcpd::source) {
                 $test = TestPhpcpd::getTestFromDatas($project, $data);
-            }
-            elseif($data->source == TestPhpmd::source)
-            {
+            } elseif ($data->source == TestPhpmd::source) {
                 $test = TestPhpmd::getTestFromDatas($project, $data);
-            }
-            elseif($data->source == TestPhpcodesniffer::source)
-            {
+            } elseif ($data->source == TestPhpcodesniffer::source) {
                 $test = TestPhpcodesniffer::getTestFromDatas($project, $data);
-            }
-            elseif($data->source == TestPhploc::source)
-            {
+            } elseif ($data->source == TestPhploc::source) {
                 $test = TestPhploc::getTestFromDatas($project, $data);
             }
-            if($test != "")
-            {
+            if ($test != "") {
                 Report::getReportByTest($test);
             }
 
 
         }
-    }
+    }*/
+
 
 
     protected static function getJsonTestDetails(string $source, int $sourceId)

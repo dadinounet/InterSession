@@ -34,4 +34,5 @@ class TestPhpcodesniffer extends Test
     {
         return "php ../vendor/bin/phpcs --report=xml ".Project::repoTesting."/".$this->getProject()->getName();
     }
+
 }

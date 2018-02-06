@@ -42,10 +42,28 @@ class TestPhploc extends Test
     }
 
 
+
+
     public function getCommande($parameter = null)
     {
         return "php ../vendor/bin/phploc --log-xml=".$this->getProject()->getPath() ."/".TestPhploc::fileReportName." ".$this->getProject()->getPath();
     }
 
 
+    /*public function getReportJson()
+    {
+
+        $report_to_JSON = json_encode($this->getReportXML());
+        //dump(json_encode($report_to_JSON));
+        //dump(getType($report_to_JSON));
+
+        /*$lines = explode("\n", $report_to_JSON);
+        foreach ($lines as $line){
+            dump($line);
+    }
+        //dump(json_encode($report_to_JSON));
+
+
+        return $report_to_JSON;
+    }*/
 }

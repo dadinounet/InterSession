@@ -24,8 +24,10 @@ class ProjectController extends Controller
     {
         //$git = "https://github.com/kedorev/warhammerSymfo.git";
         $git = "https://github.com/sebastianbergmann/phploc.git";
+
         $project = Project::newProject($git);
         $testsToMake = array();
+
 
         //@Todo : integrer les tests voulu par l'utilisateur dans le tableau testsToMake
 
@@ -41,16 +43,17 @@ class ProjectController extends Controller
         $params['tests'] = $testsToMake;
         $this->dispatch(new ProcessProject($project,$params));
 
+
     }
 
     public function getProject($id)
     {
         $projet = Project::getProjectById(intval($id));
         dump($projet);
+
         die;
 
     }
-
 
     public function mail()
     {

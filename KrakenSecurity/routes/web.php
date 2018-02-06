@@ -22,3 +22,4 @@ Route::get('/allTests', 'ProjectController@allTests');
 
 
 Route::get("/report/{id}", "ReportController@getReportById")->where('id','[0-9]+');
+
