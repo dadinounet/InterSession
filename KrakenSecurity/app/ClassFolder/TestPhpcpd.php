@@ -15,8 +15,6 @@ class TestPhpcpd extends Test
     const source = "Phpcpd";
     const idSource = 2;
 
-
-
     public static function newTestPHP(Project $project)
     {
         $test = new self();
@@ -27,6 +25,7 @@ class TestPhpcpd extends Test
 
     public static function getTestFromDatas(Project $project, $datas)
     {
+
         $test = new self();
         $test = parent::newTestFromDatas($project, $test, $datas);
         return $test;
@@ -38,9 +37,7 @@ class TestPhpcpd extends Test
         return "php ../vendor/bin/phpcpd --log-pmd=".Project::repoTesting."/".$this->getProject()->getName()."/".TestPhpcpd::fileReportName." ".Project::repoTesting."/".$this->getProject()->getName();
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getReportXML()
     {
         $file = fopen(Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhpcpd::fileReportName, "r");
@@ -48,4 +45,21 @@ class TestPhpcpd extends Test
         return(simplexml_load_string($export));
 
     }
+
+    public function getReportJson()
+    {
+        $report_to_JSON = json_encode($this->getReportXML());
+        //dump(json_encode($report_to_JSON));
+        //dump(getType($report_to_JSON));
+
+        /*$lines = explode("\n", $report_to_JSON);
+        foreach ($lines as $line){
+            dump($line);
+    }*/
+        //dump(json_encode($report_to_JSON));
+
+
+        return $report_to_JSON;
+    }
+
 }
