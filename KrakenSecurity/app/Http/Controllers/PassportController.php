@@ -15,11 +15,11 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
-class PassportController
+class PassportController extends Controller
 {
     public $successStatus = 200;
 
-    public function login(){
+    public function login(Request $request){
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
             $success['token'] = $user->createToken('Krakentoken')->accessToken;
