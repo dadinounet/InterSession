@@ -82,11 +82,11 @@ class Report
         }
     }
 
-    public function saveIntoDB(Test $test)
+    public function saveIntoDB()
     {
         $id = database::table('reports')->insertGetId([
             "report" => $this->getReportString(),
-            "testId" => $test->getId(),
+            "testId" => $this->getTest()->getId(),
             "updated_at" => $this->getUpdatedAt(),
             "created_at" => $this->getCreatedAt(),
         ]);

@@ -8,6 +8,8 @@
 
 namespace App\ClassFolder;
 
+use App\Http\Controllers\ProjectController;
+use App\Jobs\ProcessSaveTest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -84,16 +86,23 @@ abstract class Test
         $project->addTest($test);
         $test->setUpdatedAt(now());
         $test->setCreatedAt(now());
-        $id = database::table('tests')->insertGetId([
-            "source" => $test->getSource(),
-            "projectId" => $project->getId(),
-            "updated_at" => $test->getUpdatedAt(),
-            "created_at" => $test->getCreatedAt(),
-        ]);
-        $test->setId($id);
+
 
         return $test;
     }
+
+
+    public function save()
+    {
+        $id = database::table('tests')->insertGetId([
+            "source" => $this->getSource(),
+            "projectId" => $this->project->getId(),
+            "updated_at" => $this->getUpdatedAt(),
+            "created_at" => $this->getCreatedAt(),
+        ]);
+        $this->setId($id);
+    }
+
 
     protected static function newTestFromDatas(Project $project, Test $test, $datas) :Test
     {

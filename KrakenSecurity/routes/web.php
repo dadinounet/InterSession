@@ -18,3 +18,7 @@ Route::get('/', function () {
 Route::get('/test', 'ProjectController@test');
 Route::get('/getProject/{id}', 'ProjectController@getProject')->where('id', '[0-9]+');
 Route::get('/mail', 'ProjectController@mail');
+Route::get('/allTests', 'ProjectController@allTests');
+
+
+Route::get("/report/{id}", "ReportController@getReportById")->where('id','[0-9]+');

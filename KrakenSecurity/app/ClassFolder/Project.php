@@ -44,7 +44,6 @@ class Project
      */
     private $tests;
 
-
     /**
      * @var
      */
@@ -102,11 +101,11 @@ class Project
      */
     public function cloneProject()
     {
-        $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
-        //dump($commande);
+        $commande = 'git clone '.$this->getRepoGit()." ".$this->getPath();
+        dump($commande);
 
         $this->createFolder();
-        /*$return = shell_exec($commande);*/
+        $return = shell_exec($commande);
 
     }
 
@@ -116,8 +115,7 @@ class Project
      */
     public function getFolder(): bool
     {
-        $name = "../TestingArea/".$this->getName();
-        if(file_exists($name))
+        if(file_exists($this->getPath()))
         {
             return 1;
         }
@@ -132,11 +130,9 @@ class Project
     {
         if($this->getFolder() == 0)
         {
-            $path = Project::repoTesting."/".$this->getName();
-            dump($path);
             try
             {
-                mkdir($path);
+                mkdir($this->getPath());
 
             }
             catch (\Error $e)
@@ -149,7 +145,7 @@ class Project
 
     public function removeProjectTestingArea()
     {
-        $commande = "rm -rf ".Project::repoTesting."/".$this->getName();
+        $commande = "rm -rf ".$this->getPath();
         shell_exec($commande);
     }
 
@@ -279,6 +275,17 @@ class Project
         $project->setUpdatedAt($data->updated_at);
         Test::getTestByProject($project);
         return $project;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        $path = Project::repoTesting."/".$this->created_at."_".$this->getName();
+        $path = str_replace(' ','_',$path);
+        return($path);
+
     }
 
 
