@@ -21,13 +21,6 @@ services:
     links:
       - "db:db"
       # - "postfix"
-  composer:
-    restart: 'no'
-    image: composer:latest
-    command: install
-    volumes_from:
-        - app
-    working_dir: /var/www/KrakenSecurity
   # postfix:
   #   image: catatnight/postfix
   #   environment:
