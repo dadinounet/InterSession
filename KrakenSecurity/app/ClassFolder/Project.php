@@ -193,15 +193,6 @@ class Project
         $project->created_at = now();
         $project->updated_at = now();
         $project->setName($arraySplitRepoGit[0]);
-
-        /*$id =  DB::table('projects')->insertGetId([
-            "repoGit" => $project->getRepoGit(),
-            "name" => $project->getName(),
-            "updated_at" => $project->created_at,
-            "created_at" => $project->updated_at,
-            "user_id" => Auth::id(),
-        ]);*/
-        //$project->setId($id);
         return $project;
     }
 
@@ -228,6 +219,7 @@ class Project
             "name" => $this->getName(),
             "updated_at" => $this->created_at,
             "created_at" => $this->updated_at,
+            "user_id" => Auth::id(),
         ]);
         $this->setId($id);
     }
@@ -287,6 +279,22 @@ class Project
         $project->setRepoGit($data->repoGit);
         $project->setCreatedAt($data->created_at);
         $project->setUpdatedAt($data->updated_at);
+        $project->setUserId($data->user_id);
+        Test::getTestByProject($project);
+        return $project;
+    }
+
+    public static function getProjectByUserId(int $user_id): ?Project
+    {
+        $data = DB::table('projects')->where('user_id', $user_id)->first();
+        $project = new self();
+
+        $project->setId($data->id);
+        $project->setName($data->name);
+        $project->setRepoGit($data->repoGit);
+        $project->setCreatedAt($data->created_at);
+        $project->setUpdatedAt($data->updated_at);
+        $project->setUserId($data->user_id);
         Test::getTestByProject($project);
         return $project;
     }
