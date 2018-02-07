@@ -8,6 +8,7 @@
 
 namespace App\ClassFolder;
 
+use App\Jobs\ProcessReport;
 use Composer\Command\SearchCommand;
 use Illuminate\Support\Facades\DB as database;
 
@@ -57,11 +58,21 @@ class Report
         $report->test = $test;
         $test->addReport($report, $parameter);
         $report->commande = $test->getCommande($parameter);
-        $report->report = shell_exec($report->getCommande());
 
+
+        $report->setCreatedAt(now());
+        $report->setUpdatedAt(now());
+
+        return $report;
+    }
+
+
+    public function executeCommandeAndDefineReport(Test $test)
+    {
+        $this->report = shell_exec($this->getCommande());
         if($test->getSource() == TestPhploc::source || $test->getSource() == TestPhpcpd::source)
         {
-            $report->report = $test->getReportXML();
+            $this->report = $test->getReportXML();
         }
         else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source)
         {
@@ -69,7 +80,7 @@ class Report
         }
         else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source )
         {
-            $report->report = simplexml_load_string($report->report);
+            $this->report = simplexml_load_string($this->report);
         }
         else if($test->getSource() == TestPHPmnd::source) {
             $result = array();
@@ -104,22 +115,21 @@ class Report
         }
         else if($test->getSource() == TestSecurityChecker::source)
         {
-            $report->report = json_decode($report->report);
+            $this->report = json_decode($this->report);
         }
-
-        $report->setCreatedAt(now());
-        $report->setUpdatedAt(now());
-        $id = database::table('reports')->insertGetId([
-            "report" => $report->getReportString(),
-            "testId" => $test->getId(),
-            "updated_at" => $report->getUpdatedAt(),
-            "created_at" => $report->getCreatedAt(),
-        ]);
-        $report->setId($id);
-        return $report;
     }
 
-    
+    public function saveIntoDB()
+    {
+        $id = database::table('reports')->insertGetId([
+            "report" => $this->getReportString(),
+            "testId" => $this->getTest()->getId(),
+            "updated_at" => $this->getUpdatedAt(),
+            "created_at" => $this->getCreatedAt(),
+        ]);
+        $this->setId($id);
+    }
+
 
     public function getReportJson()
     {

@@ -35,8 +35,8 @@ class TestPhploc extends Test
      */
     public function getReportXML()
     {
-        $file = fopen(Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhploc::fileReportName, "r");
-        $export = fread($file,filesize(Project::repoTesting."/".$this->getProject()->getName()."/".TestPhploc::fileReportName));
+        $file = fopen($this->getProject()->getPath()."/".TestPhploc::fileReportName, "r");
+        $export = fread($file,filesize($this->getProject()->getPath()."/".TestPhploc::fileReportName));
         return(simplexml_load_string($export));
 
     }
@@ -46,7 +46,7 @@ class TestPhploc extends Test
 
     public function getCommande($parameter = null)
     {
-        return "php ../vendor/bin/phploc --log-xml=".Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhploc::fileReportName." ".Project::repoTesting."/".$this->getProject()->getName();
+        return "php ../vendor/bin/phploc --log-xml=".$this->getProject()->getPath() ."/".TestPhploc::fileReportName." ".$this->getProject()->getPath();
     }
 
 
