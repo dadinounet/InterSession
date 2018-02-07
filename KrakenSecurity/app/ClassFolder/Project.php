@@ -9,13 +9,15 @@
 namespace App\ClassFolder;
 
 
-
+use App\User;
 use App\Mail\startTestMail;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Parent_;
 use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
 use Symfony\Component\Process\Exception\LogicException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class Project
 {
@@ -49,6 +51,9 @@ class Project
      * @var
      */
     protected $updated_at;
+
+
+    private $user_id;
 
     /**
      * Project constructor.
@@ -87,6 +92,23 @@ class Project
     {
         $this->name = $name;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param mixed $user_id
+     */
+    public function setUserId($user_id)
+    {
+        $this->user_id = $user_id;
+    }
+
     /**
      * Clone the repo git in testing folder.
      */
@@ -177,6 +199,7 @@ class Project
             "name" => $project->getName(),
             "updated_at" => $project->created_at,
             "created_at" => $project->updated_at,
+            "user_id" => Auth::id(),
         ]);
         $project->setId($id);
         return $project;

@@ -19,3 +19,7 @@ Route::get('/test', 'ProjectController@test');
 Route::get('/getProject/{id}', 'ProjectController@getProject')->where('id', '[0-9]+');
 Route::get('/mail', 'ProjectController@mail');
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

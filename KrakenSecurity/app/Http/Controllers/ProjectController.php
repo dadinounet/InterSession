@@ -65,8 +65,9 @@ class ProjectController extends Controller
             }
         }*/
         //dump($project);
-        dump($project->getProjectJson());
-        die;
+        //dump($project->getProjectJson());
+        //die;
+        return($project->getProjectJson());
 
     }
 
