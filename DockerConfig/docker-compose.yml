@@ -49,7 +49,7 @@ services:
       - "app:app"
   redis:
     image: redis
-    port: 
+    ports: 
       - "6379"
 volumes:
   dbdata:
