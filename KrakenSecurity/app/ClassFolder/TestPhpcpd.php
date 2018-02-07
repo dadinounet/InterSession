@@ -35,7 +35,7 @@ class TestPhpcpd extends Test
 
     public function getCommande($parameter = null)
     {
-        return "php ../vendor/bin/phpcpd --log-pmd=".Project::repoTesting."/".$this->getProject()->getName()."/".TestPhpcpd::fileReportName." ".Project::repoTesting."/".$this->getProject()->getName();
+        return "php ../vendor/bin/phpcpd --log-pmd=".$this->getProject()->getPath()."/".TestPhpcpd::fileReportName." ".$this->getProject()->getPath();
     }
 
     /**
@@ -43,8 +43,8 @@ class TestPhpcpd extends Test
      */
     public function getReportXML()
     {
-        $file = fopen(Project::repoTesting."/".$this->getProject()->getName() ."/".TestPhpcpd::fileReportName, "r");
-        $export = fread($file,filesize(Project::repoTesting."/".$this->getProject()->getName()."/".TestPhpcpd::fileReportName));
+        $file = fopen($this->getProject()->getPath() ."/".TestPhpcpd::fileReportName, "r");
+        $export = fread($file,filesize($this->getProject()->getPath()."/".TestPhpcpd::fileReportName));
         return(simplexml_load_string($export));
 
     }

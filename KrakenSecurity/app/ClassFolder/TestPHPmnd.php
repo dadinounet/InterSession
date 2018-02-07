@@ -18,7 +18,7 @@ class TestPHPmnd extends Test
     {
         //php ./vendor/bin/phpmnd TestingArea/phploc/ --strings
 
-        return "php ../vendor/bin/phpmnd ".Project::repoTesting."/".$this->getProject()->getName() ." --strings --extensions=all";
+        return "php ../vendor/bin/phpmnd ".$this->getProject()->getPath() ." --strings --extensions=all";
     }
 
 

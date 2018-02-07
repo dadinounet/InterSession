@@ -32,6 +32,6 @@ class TestPhpcodesniffer extends Test
 
     public function getCommande($parameter = null)
     {
-        return "php ../vendor/bin/phpcs --report=xml ".Project::repoTesting."/".$this->getProject()->getName();
+        return "php ../vendor/bin/phpcs --report=xml ".$this->getProject()->getPath();
     }
 }
