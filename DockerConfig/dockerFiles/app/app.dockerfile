@@ -6,10 +6,12 @@ ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV COMPOSER_HOME /tmp
 ENV COMPOSER_VERSION 1.6.2
 RUN apt-get update \
-    && apt-get install -y git \
+    && apt-get install -y git libmcrypt-dev libxml2-dev \
     && docker-php-ext-install \
         mbstring \
         pdo_mysql \
+        bcmath \
+        xml \
     && docker-php-source delete \
     && a2ensite kraken \
     && a2dissite 000-default
