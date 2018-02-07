@@ -21,7 +21,6 @@
         "predis/predis": "^1.1",
         "sebastian/phpcpd": "^3.0",
         "squizlabs/php_codesniffer": "*"
-
     },
     "require-dev": {
         "filp/whoops": "~2.0",

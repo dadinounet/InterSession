@@ -21,6 +21,8 @@ Route::get('disconnect', 'PassportController@disconnect')->middleware('auth:api'
 
 Route::get('userdetails', 'PassportController@getDetails')->middleware('auth:api')->name('userdetails');
 
+Route::get('/test', 'ProjectController@test')->middleware('auth:api')->name('test');
+
 /*Route::middleware('auth:api')->group(function() {
     Route::post('get-details', 'PassportController@getDetails');
 });*/

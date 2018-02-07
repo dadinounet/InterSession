@@ -26,6 +26,7 @@ class ProjectController extends Controller
         $git = "https://github.com/sebastianbergmann/phploc.git";
 
         $project = Project::newProject($git);
+
         $testsToMake = array();
 
 
@@ -42,6 +43,47 @@ class ProjectController extends Controller
 
         $params['tests'] = $testsToMake;
         $this->dispatch(new ProcessProject($project,$params));
+
+        /*$project->cloneProject();
+
+        $phpmdTest = TestPhpmd::newTestPHP($project);
+        $testCpd = TestPhpcpd::newTestPHP($project);
+        $testPHPloc = TestPhploc::newTestPHP($project);
+        $testSniffer = TestPhpcodesniffer::newTestPHP($project);
+        $testMnd = TestPHPmnd::newTestPHP($project);
+
+        //dump($testPHPloc->getTestJson());
+        foreach ($paramaters as $paramater){
+            $reportMD = Report::newReport($phpmdTest, $paramater);
+        }
+        //$reportMD = Report::newReport($phpmdTest, "codesize");
+
+        $composerLock = TestSecurityChecker::newTestPHP($project);
+        $reportMDcodesize = Report::newReport($phpmdTest, "codesize");
+        $reportMDcleancode = Report::newReport($phpmdTest, "cleancode");
+        $reportPhploc = Report::newReport($testPHPloc);
+
+        $reportcpd = Report::newReport($testCpd);
+
+        $reportSnifer = Report::newReport($testSniffer);
+        $reportMND = Report::newReport($testMnd);
+
+        $reportMND->getReportJson();
+        $testMnd->getTestJson();
+        $reportSecurityChecker = Report::newReport($composerLock);
+        //dump($reportSecurityChecker->getReportJson());
+        //dump($composerLock->getTestJson());
+        /*foreach ($project->getTests() as $test)
+        {
+            if($test->getSource() == TestSecurityChecker::source)
+            {
+                dump($test->getReports());
+            }
+        }*/
+        //dump($project);
+        //dump($project->getProjectJson());
+        //die;
+        //return($project->getProjectJson());
 
 
     }

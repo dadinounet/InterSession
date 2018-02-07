@@ -23,3 +23,7 @@ Route::get('/allTests', 'ProjectController@allTests');
 
 Route::get("/report/{id}", "ReportController@getReportById")->where('id','[0-9]+');
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
