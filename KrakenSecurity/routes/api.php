@@ -23,6 +23,8 @@ Route::get('userdetails', 'PassportController@getDetails')->middleware('auth:api
 
 Route::get('/test', 'ProjectController@test')->middleware('auth:api')->name('test');
 
+Route::get('/retour', 'ProjectController@returnTest')->middleware('auth:api')->name('retour');
+
 /*Route::middleware('auth:api')->group(function() {
     Route::post('get-details', 'PassportController@getDetails');
 });*/

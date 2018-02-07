@@ -114,11 +114,10 @@ class Project
      */
     public function cloneProject()
     {
-        $commande = 'git clone '.$this->getRepoGit()." ".Project::repoTesting."/".$this->getName();
-        //dump($this->getRepoGit());
-        //dump($commande);
+        $commande = 'git clone '.$this->getRepoGit()." ".$this->getPath();
+
         $this->createFolder();
-        shell_exec($commande);
+        $return = shell_exec($commande);
 
     }
     /**
@@ -126,8 +125,7 @@ class Project
      */
     public function getFolder(): bool
     {
-        $name = "../TestingArea/".$this->getName();
-        if(file_exists($name))
+        if(file_exists($this->getPath()))
         {
             return 1;
         }
@@ -143,7 +141,8 @@ class Project
         {
             try
             {
-                mkdir(Project::repoTesting."/".$this->getName());
+                mkdir($this->getPath());
+
             }
             catch (\Error $e)
             {
@@ -154,7 +153,7 @@ class Project
     }
     public function removeProjectTestingArea()
     {
-        $commande = "rm -rf ".Project::repoTesting."/".$this->getName();
+        $commande = "rm -rf ".$this->getPath();
         shell_exec($commande);
     }
     /**
@@ -194,14 +193,7 @@ class Project
         $project->created_at = now();
         $project->updated_at = now();
         $project->setName($arraySplitRepoGit[0]);
-        $id =  DB::table('projects')->insertGetId([
-            "repoGit" => $project->getRepoGit(),
-            "name" => $project->getName(),
-            "updated_at" => $project->created_at,
-            "created_at" => $project->updated_at,
-            "user_id" => Auth::id(),
-        ]);
-        $project->setId($id);
+
         return $project;
     }
 
@@ -219,7 +211,20 @@ class Project
         }
     }
 
-   
+
+    public function save()
+    {
+
+        $id =  DB::table('projects')->insertGetId([
+            "repoGit" => $this->getRepoGit(),
+            "name" => $this->getName(),
+            "updated_at" => $this->created_at,
+            "created_at" => $this->updated_at,
+            "user_id" => Auth::id(),
+        ]);
+        $this->setId($id);
+    }
+
     private function setId(int $id)
     {
         $this->id = $id;
@@ -275,8 +280,35 @@ class Project
         $project->setRepoGit($data->repoGit);
         $project->setCreatedAt($data->created_at);
         $project->setUpdatedAt($data->updated_at);
+        $project->setUserId($data->user_id);
         Test::getTestByProject($project);
         return $project;
+    }
+
+    public static function getProjectByUserId(int $user_id): ?Project
+    {
+        $data = DB::table('projects')->where('user_id', $user_id)->first();
+        $project = new self();
+
+        $project->setId($data->id);
+        $project->setName($data->name);
+        $project->setRepoGit($data->repoGit);
+        $project->setCreatedAt($data->created_at);
+        $project->setUpdatedAt($data->updated_at);
+        $project->setUserId($data->user_id);
+        Test::getTestByProject($project);
+        return $project;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        $path = Project::repoTesting."/".$this->created_at."_".$this->getName();
+        $path = str_replace(' ','_',$path);
+        return($path);
+
     }
 
 
