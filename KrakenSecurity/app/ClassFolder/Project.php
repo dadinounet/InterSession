@@ -11,6 +11,7 @@ namespace App\ClassFolder;
 
 
 use App\Mail\startTestMail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Parent_;
 use SebastianBergmann\CodeCoverage\Report\Xml\Tests;
@@ -49,6 +50,27 @@ class Project
      * @var
      */
     protected $updated_at;
+
+    /**
+     * @var integer
+     */
+    protected $user_id;
+
+    /**
+     * @return int
+     */
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function setUserId(int $user_id)
+    {
+        $this->user_id = $user_id;
+    }
 
     /**
      * Project constructor.
@@ -119,6 +141,7 @@ class Project
         {
             try
             {
+                var_dump($this->getPath());
                 mkdir($this->getPath());
 
             }
@@ -167,6 +190,7 @@ class Project
         $arraySplitRepoGit = explode ( '/' , $repoGit );
         $arraySplitRepoGit = explode ( '.' , $arraySplitRepoGit[count($arraySplitRepoGit)-1] );
         $project->tests = array();
+        $project->user_id = Auth::id();
 
         $project->created_at = now();
         $project->updated_at = now();
@@ -191,10 +215,11 @@ class Project
 
     public function save()
     {
-
+        dump($this);
         $id =  DB::table('projects')->insertGetId([
             "repoGit" => $this->getRepoGit(),
             "name" => $this->getName(),
+            "user_id" => $this->user_id,
             "updated_at" => $this->created_at,
             "created_at" => $this->updated_at,
         ]);
@@ -250,14 +275,34 @@ class Project
     {
         $data = DB::table('projects')->where('id', $id)->first();
         $project = new self();
-
         $project->setId($data->id);
         $project->setName($data->name);
         $project->setRepoGit($data->repoGit);
+        $project->setUserId($data->user_id);
         $project->setCreatedAt($data->created_at);
         $project->setUpdatedAt($data->updated_at);
         Test::getTestByProject($project);
         return $project;
+    }
+
+    public static function getProjectByUserId(int $user_id): ?array
+    {
+        $projects = array();
+        $datas = DB::table('projects')->where('user_id', $user_id);
+        foreach ($datas as $data){
+            $project = new self();
+
+            $project->setId($data->id);
+            $project->setName($data->name);
+            $project->setRepoGit($data->repoGit);
+            $project->setUserId($data->user_id);
+            $project->setCreatedAt($data->created_at);
+            $project->setUpdatedAt($data->updated_at);
+            Test::getTestByProject($project);
+            array_push($projects, $project);
+        }
+
+        return $projects;
     }
 
     /**
@@ -265,8 +310,11 @@ class Project
      */
     public function getPath(): string
     {
+
+
         $path = Project::repoTesting."/".$this->created_at."_".$this->getName();
         $path = str_replace(' ','_',$path);
+        var_dump($path);
         return($path);
 
     }
@@ -274,6 +322,7 @@ class Project
 
     public function getProjectJson()
     {
+
         $tests_results = array();
         $name_project = $this->name;
         foreach ($this->tests as $test) {

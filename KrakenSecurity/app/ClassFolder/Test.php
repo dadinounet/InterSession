@@ -256,22 +256,18 @@ abstract class Test
     public function getTestJson(){
         $result = array();
         $source_test=$this->source;
-        //dump($this);
         foreach ($this->reports as $report){
-            //dump(json_encode($report));
             $report_to_JSON = json_decode($report->getReportJson());
-            //array_push($result, $report_to_JSON);
             $temp_array = array($source_test => $report_to_JSON);
             $result = array_merge($result, $temp_array);
         }
         $result_to_JSON = json_encode($result);
-        dump($result_to_JSON);
         return $result_to_JSON;
 
     }
 
 
-    /*public static function getTestById(int $id, Test $test, Project $project = null)
+    public static function getTestById(int $id, Test $test, Project $project = null)
     {
         $data = database::table('tests')->where('id', $id)->first();
         $test->setId($id);
@@ -301,7 +297,7 @@ abstract class Test
 
 
         }
-    }*/
+    }
 
 
 

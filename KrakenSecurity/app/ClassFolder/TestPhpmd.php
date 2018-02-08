@@ -43,7 +43,7 @@ class TestPhpmd extends Test
     {
         if(in_array($parameter, TestPhpmd::validRules ))
         {
-            return  "php ../vendor/bin/phpmd ".$this->getProject()->getPath()."/ xml rulesets/".$parameter.".xml";
+            return  "php ./vendor/bin/phpmd ".$this->getProject()->getPath()."/ xml rulesets/".$parameter.".xml";
         }
         else
         {

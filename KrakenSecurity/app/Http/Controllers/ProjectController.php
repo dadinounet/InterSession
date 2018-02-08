@@ -18,9 +18,17 @@ use App\ClassFolder\TestPhpmd;
 use App\ClassFolder\TestPHPmnd;
 use App\ClassFolder\TestSecurityChecker;
 use App\Jobs\ProcessProject;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
+    public $successStatus = 200;
+
+    public function testform(Request $request)
+    {
+        return '<form>' . csrf_field() . '</form>';
+    }
+
     public function test(Request $request)
     {
         //$git = "https://github.com/kedorev/warhammerSymfo.git";
@@ -37,25 +45,112 @@ class ProjectController extends Controller
         $project = Project::newProject($git);
         $testsToMake = array();
 
+        //$user = Auth::user();
+        //return ('tataosef');
+        if($phploc == "1"){
+            $testsToMake[TestPhploc::source] = 1;
+            $success['phploc'] = 'OK';
+        }
+        else {
+            $testsToMake[TestPhploc::source] = 0;
+            $success['phploc'] = 'NOT OK';
+        }
+        if($phpmd == "1"){
+            $testsToMake[TestPhpmd::source] = 1;
+            $success['phpmd'] = 'OK';
+        }
+        else {
+            $testsToMake[TestPhpmd::source] = 0;
+            $success['phpmd'] = 'NOT OK';
+        }
+        if($securityschecker == "1"){
+            $testsToMake[TestSecurityChecker::source] = 1;
+            $success['securityschecker'] = 'OK';
+        }
+        else {
+            $testsToMake[TestSecurityChecker::source] = 0;
+            $success['securityschecker'] = 'NOT OK';
+        }
+        if($phpmnd == "1"){
+            $testsToMake[TestPHPmnd::source] = 1;
+            $success['phpmnd'] = 'OK';
+        }
+        else {
+            $testsToMake[TestPHPmnd::source] = 0;
+            $success['phpmnd'] = 'NOT OK';
+        }
+        if($phpcodesniffer == "1"){
+            $testsToMake[TestPhpcodesniffer::source] = 1;
+            $success['phpcodesniffer'] = 'OK';
+        }
+        else {
+            $testsToMake[TestPhpcodesniffer::source] = 0;
+            $success['phpcodesniffer'] = 'NOT OK';
+        }
+        if($phpcpd == "1"){
+            $testsToMake[TestPhpcpd::source] = 1;
+            $success['phpcpd'] = 'OK';
+        }
+        else {
+            $testsToMake[TestPhpcpd::source] = 0;
+            $success['phpcpd'] = 'NOT OK';
+        }
 
 
+        //@Todo : integrer les tests voulu par l'utilisateur dans le tableau testsToMake
 
-/*        //@Todo : integrer les tests voulu par l'utilisateur dans le tableau testsToMake
-
-        $testsToMake[TestPhploc::source] = 1;
+/*        $testsToMake[TestPhploc::source] = 1;
         $testsToMake[TestPhpmd::source] = 1;
         $testsToMake[TestSecurityChecker::source] = 1;
         $testsToMake[TestPHPmnd::source] = 1;
         $testsToMake[TestPhpcodesniffer::source] = 1;
-        $testsToMake[TestPhpcpd::source] = 1;
+        $testsToMake[TestPhpcpd::source] = 1;*/
 
         //---------------------------------------------------------
 
         $params['tests'] = $testsToMake;
-        $this->dispatch(new ProcessProject($project,$params));*/
-        dump($securityschecker);
-        die;
+        $this->dispatch(new ProcessProject($project,$params));
+        /*$project->cloneProject();
+        dump("start save");
+        $project->save();
+        foreach ($params['tests'] as $test => $value)
+        {
+            if($value == 1)
+            {
+                $params = null;
+                if(TestPhploc::source == $test and $value == 1)
+                {
+                    $testInstance = TestPhploc::newTestPHP($this->project);
+                }
+                elseif(TestPhpmd::source == $test and $value == 1)
+                {
+                    $testInstance = TestPhpmd::newTestPHP($this->project);
+                    $params = "codesize";
+                }
+                elseif(TestPhpcpd::source == $test and $value == 1)
+                {
+                    $testInstance = TestPhpcpd::newTestPHP($this->project);
+                }
+                elseif(TestSecurityChecker::source == $test and $value == 1)
+                {
+                    $testInstance = TestSecurityChecker::newTestPHP($this->project);
+                }
+                elseif(TestPhpcodesniffer::source == $test and $value == 1)
+                {
+                    $testInstance = TestPhpcodesniffer::newTestPHP($this->project);
+                }
+                elseif(TestPHPmnd::source == $test and $value == 1)
+                {
+                    $testInstance = TestPHPmnd::newTestPHP($this->project);
+                }
 
+                $testInstance->save();
+                $report = Report::newReport($testInstance,$params);
+                $report->saveIntoDB();
+            }
+        }
+        $project->removeProjectTestingArea();*/
+        return response()->json(['success' => $success], $this->successStatus);
     }
 
 
@@ -81,10 +176,11 @@ class ProjectController extends Controller
     }
 
     public function TesttoJSON($id){
-        $project = $this->getProject();
+        $project = Project::getProjectById($id);
         $project_to_JSON = $project->getProjectJson();
         //$this->test($git);
         //$project = $this->getProject($id);
         return($project_to_JSON);
+
     }
 }

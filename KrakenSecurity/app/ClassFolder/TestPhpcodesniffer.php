@@ -32,7 +32,7 @@ class TestPhpcodesniffer extends Test
 
     public function getCommande($parameter = null)
     {
-        return "php ../vendor/bin/phpcs --report=xml ".$this->getProject()->getPath();
+        return "php ./vendor/bin/phpcs --report=xml ".$this->getProject()->getPath();
     }
 
 }

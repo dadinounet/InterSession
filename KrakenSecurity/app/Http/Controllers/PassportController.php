@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ClassFolder\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -28,7 +29,9 @@ class PassportController
             $dateConnection = User::where('id', $user_id)->update(array('connection_date' => $current->format('Y-m-d H:i:s')));
             $success['id'] = $user_id;
             $success['name'] =  $user->name;
+            //$success['projects'] = Project::getProjectByUserId($user_id);
             $success['connection_date_update'] = $dateConnection;
+            //dump($success);
             return response()->json(['success' => $success], $this->successStatus);
         }
         else{

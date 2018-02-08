@@ -70,13 +70,14 @@ class Report
     public function executeCommandeAndDefineReport(Test $test)
     {
         $this->report = shell_exec($this->getCommande());
+        dump(getcwd());
         if($test->getSource() == TestPhploc::source || $test->getSource() == TestPhpcpd::source)
         {
             $this->report = $test->getReportXML();
         }
         else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source)
         {
-            $report->report = simplexml_load_string($report->report);
+            $this->report = simplexml_load_string($this->report);
         }
         else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source )
         {
@@ -84,7 +85,7 @@ class Report
         }
         else if($test->getSource() == TestPHPmnd::source) {
             $result = array();
-            $element = explode("--------------------------------------------------------------------------------\n", $report->report);
+            $element = explode("--------------------------------------------------------------------------------\n", $this->report);
             foreach ($element as $sub_elements) {
                 $lines = explode("\n", $sub_elements);
                 $size_lines = sizeof($lines);
@@ -111,7 +112,7 @@ class Report
                 }
 
             }
-            $report->report = $result;
+            $this->report = $result;
         }
         else if($test->getSource() == TestSecurityChecker::source)
         {
@@ -136,35 +137,7 @@ class Report
 
         $report = $this->report;
         $type = getType($report);
-        /*if ($type != "object"){
-            $report_to_JSON = json_decode($report);
-        }
-        else{
-            $report_to_JSON = json_encode($report);
-        }*/
-        //dump("test report to JSON");
-        //dump($report);
-
-       /* dump(getType($this->getReport()));
-        dump(getType($this->getTest()));*/
-       //$test = $this->getTest();
-       //dump($test->getReports());
-       //$report =
-        /*$report = $this->getReport();
-        $typetest = getType($report);
-        if($typetest =! "object"){
-            $report_xml = simplexml_load_string($report);
-            //$return =  $report_xml->asXML();
-            dump($report_xml);
-        }
-        else {
-            $return = $report;
-        }
-
-        //dump($return);
-        dump($typetest);*/
         $report_to_JSON = json_encode($report);
-        dump($report_to_JSON);
         return $report_to_JSON;
     }
 
