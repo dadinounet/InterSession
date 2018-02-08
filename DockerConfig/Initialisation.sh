@@ -18,6 +18,7 @@ if [ "$(docker ps | grep app)" ]
 then
     docker-compose exec app php KrakenSecurity/artisan key:generate
     docker-compose exec app php KrakenSecurity/artisan migrate
+    docker-compose exec app php KrakenSecurity/artisan passport:install
     docker-compose exec app php KrakenSecurity/artisan optimize
 else
         echo "Error"
