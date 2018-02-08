@@ -25,14 +25,10 @@ Route::post('/newProject', 'ProjectController@test')->middleware('auth:api')->na
 
 Route::get('/resultToJson/{id}','ProjectController@TesttoJSON')->middleware('auth:api')->name('resultToJson');
 
-Route::post();
-//Route::get('testproject/{git}', 'ProjectController@test')->middleware('auth:api')->name('testproject');
 
 /*Route::middleware('auth:api')->group(function() {
     Route::post('get-details', 'PassportController@getDetails');
 });*/
-//Route::post('get-details', 'PassportController@getDetails')->middleware('client');
-
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

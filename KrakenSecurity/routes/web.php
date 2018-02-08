@@ -18,6 +18,7 @@ Route::get('/toto', function () {
     return view('welcome');
 });
 
+
 Route::get('/getProject/{id}', 'ProjectController@getProject')->where('id', '[0-9]+');
 Route::get('/mail', 'ProjectController@mail');
 Route::get('/allTests', 'ProjectController@allTests');
