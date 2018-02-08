@@ -15,7 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/test', 'ProjectController@test');
+Route::post('testproject', 'ProjectController@test')->name('testproject');
 Route::get('/getProject/{id}', 'ProjectController@getProject')->where('id', '[0-9]+');
 Route::get('/mail', 'ProjectController@mail');
 Route::get('/allTests', 'ProjectController@allTests');

@@ -15,8 +15,15 @@ RUN apt-get update \
         zip \
     && docker-php-source delete \
     && a2ensite kraken \
-    && a2dissite 000-default \
+    && a2dissite 000-default
     && a2enmod rewrite
+RUN apt-get update -y && apt-get install -y libpng-dev
+RUN apt-get update && \
+    apt-get install -y \
+        zlib1g-dev
+RUN docker-php-ext-install mbstring
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install gd
 RUN cd /var/www/KrakenSecurity && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN cd /var/www/KrakenSecurity && php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 RUN cd /var/www/KrakenSecurity && php composer-setup.php
@@ -24,3 +31,4 @@ RUN cd /var/www/KrakenSecurity && php -r "unlink('composer-setup.php');"
 RUN cd /var/www/KrakenSecurity && php composer.phar install
 RUN cd /var/www/KrakenSecurity && php composer.phar update
 RUN cd /var/www/KrakenSecurity && chmod 777 -R storage
+
