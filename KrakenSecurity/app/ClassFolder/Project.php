@@ -141,7 +141,6 @@ class Project
         {
             try
             {
-                var_dump($this->getPath());
                 mkdir($this->getPath());
 
             }
@@ -215,7 +214,6 @@ class Project
 
     public function save()
     {
-        dump($this);
         $id =  DB::table('projects')->insertGetId([
             "repoGit" => $this->getRepoGit(),
             "name" => $this->getName(),
@@ -314,7 +312,6 @@ class Project
 
         $path = Project::repoTesting."/".$this->created_at."_".$this->getName();
         $path = str_replace(' ','_',$path);
-        var_dump($path);
         return($path);
 
     }

@@ -89,11 +89,9 @@ class ProcessProject implements ShouldQueue
                 $report = Report::newReport($testInstance,$params);
                 $report->executeCommandeAndDefineReport($testInstance);
                 $report->saveIntoDB();
-                dump($report);
             }
         }
         $this->project->removeProjectTestingArea();
 
-        dump($this->project);
     }
 }
