@@ -70,7 +70,6 @@ class Report
     public function executeCommandeAndDefineReport(Test $test)
     {
         $this->report = shell_exec($this->getCommande());
-        dump(getcwd());
         if($test->getSource() == TestPhploc::source || $test->getSource() == TestPhpcpd::source)
         {
             $this->report = $test->getReportXML();

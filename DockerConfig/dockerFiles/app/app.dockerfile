@@ -15,7 +15,7 @@ RUN apt-get update \
         zip \
     && docker-php-source delete \
     && a2ensite kraken \
-    && a2dissite 000-default
+    && a2dissite 000-default \
     && a2enmod rewrite
 RUN apt-get update -y && apt-get install -y libpng-dev
 RUN apt-get update && \

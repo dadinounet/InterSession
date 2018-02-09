@@ -215,7 +215,6 @@ class Project
 
     public function save()
     {
-        dump($this);
         $id =  DB::table('projects')->insertGetId([
             "repoGit" => $this->getRepoGit(),
             "name" => $this->getName(),
