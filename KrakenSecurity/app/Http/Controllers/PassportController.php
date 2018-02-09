@@ -31,7 +31,6 @@ class PassportController
             $success['name'] =  $user->name;
             //$success['projects'] = Project::getProjectByUserId($user_id);
             $success['connection_date_update'] = $dateConnection;
-            //dump($success);
             return response()->json(['success' => $success], $this->successStatus);
         }
         else{

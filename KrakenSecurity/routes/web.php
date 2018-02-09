@@ -22,6 +22,7 @@ Route::get('/toto', function () {
 Route::get('/getProject/{id}', 'ProjectController@getProject')->where('id', '[0-9]+');
 Route::get('/mail', 'ProjectController@mail');
 Route::get('/allTests', 'ProjectController@allTests');
+Route::get('/resultTest/{id}','ProjectController@TesttoJSON')->name('resultTest');
 
 ///Route::post('/testproject', 'ProjectController@test')->name('testproject');
 //Route::get('/testform', function () {
