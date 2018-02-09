@@ -328,7 +328,8 @@ class Project
         foreach ($this->tests as $test) {
             $report_to_JSON = json_decode($test->getTestJson());
             $temp_array = array($report_to_JSON);
-            array_push($tests_results, $temp_array);
+            //$temp = json_decode($temp_array)
+            array_push($tests_results, $report_to_JSON);
         }
         $result = array($name_project => $tests_results);
         $result_to_JSON = json_encode($result);

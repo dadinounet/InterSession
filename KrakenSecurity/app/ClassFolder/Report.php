@@ -75,10 +75,6 @@ class Report
         {
             $this->report = $test->getReportXML();
         }
-        else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source)
-        {
-            $this->report = simplexml_load_string($this->report);
-        }
         else if($test->getSource() == TestPhpmd::source || $test->getSource() == TestPhpcodesniffer::source )
         {
             $this->report = simplexml_load_string($this->report);
@@ -137,7 +133,8 @@ class Report
 
         $report = $this->report;
         $type = getType($report);
-        $report_to_JSON = json_encode($report);
+        $report_xml = simplexml_load_string($report);
+        $report_to_JSON = json_encode($report_xml);
         return $report_to_JSON;
     }
 
