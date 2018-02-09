@@ -46,7 +46,7 @@ class TestPhploc extends Test
 
     public function getCommande($parameter = null)
     {
-        return "php ../vendor/bin/phploc --log-xml=".$this->getProject()->getPath() ."/".TestPhploc::fileReportName." ".$this->getProject()->getPath();
+        return "php ./vendor/bin/phploc --log-xml=".$this->getProject()->getPath() ."/".TestPhploc::fileReportName." ".$this->getProject()->getPath();
     }
 
 

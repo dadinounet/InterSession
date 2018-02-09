@@ -14,3 +14,5 @@ KrakenSecurity/build/coverage
 KrakenSecurity/bootstrap/compiled.php
 KrakenSecurity/composer.lock
 KrakenSecurity/TestingArea
+KrakenSecurity/composer.phar
+KrakenSecurity/composer-setup.php

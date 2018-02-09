@@ -20,24 +20,16 @@ services:
       - "8080:80"
     links:
       - "db:db"
-      # - "postfix"
-  # postfix:
-  #   image: catatnight/postfix
-  #   environment:
-  #     - maildomain=it-squad.fr
-  #     - smtp_user=user:pass
-  #   expose:
-  #     - 25:25
   meteor:
-    build:
-      context: ./dockerFiles/meteor
-      dockerfile: meteor.dockerfile
-    working_dir: /var/www/KrakenSecurity
-    volumes:
-      - ../KrakenSecurity:/var/www/KrakenSecurity
-    ports:
-      - "9000:3000"
-    links:
+   build:
+     context: ./dockerFiles/meteor
+     dockerfile: meteor.dockerfile
+   working_dir: /var/www/KrakenSecurity
+   volumes:
+     - ../KrakenSecurity:/var/www/KrakenSecurity
+   ports:
+     - "9000:3000"
+   links:
       - "db:db"
       - "app:app"
   redis:

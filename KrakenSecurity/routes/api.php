@@ -21,11 +21,14 @@ Route::get('disconnect', 'PassportController@disconnect')->middleware('auth:api'
 
 Route::get('userdetails', 'PassportController@getDetails')->middleware('auth:api')->name('userdetails');
 
+Route::post('/newProject', 'ProjectController@test')->middleware('auth:api')->name('newProject');
+
+Route::get('/resultToJson/{id}','ProjectController@TesttoJSON')->middleware('auth:api')->name('resultToJson');
+
+
 /*Route::middleware('auth:api')->group(function() {
     Route::post('get-details', 'PassportController@getDetails');
 });*/
-//Route::post('get-details', 'PassportController@getDetails')->middleware('client');
-
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

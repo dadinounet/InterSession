@@ -34,7 +34,7 @@ class TestPhpcpd extends Test
 
     public function getCommande($parameter = null)
     {
-        return "php ../vendor/bin/phpcpd --log-pmd=".$this->getProject()->getPath()."/".TestPhpcpd::fileReportName." ".$this->getProject()->getPath();
+        return "php ./vendor/bin/phpcpd --log-pmd=".$this->getProject()->getPath()."/".TestPhpcpd::fileReportName." ".$this->getProject()->getPath();
     }
 
 

@@ -19,6 +19,7 @@ class Historique extends Migration
             $table->increments('id');
             $table->string('repoGit', 255);
             $table->string('name', 100);
+            $table->integer('user_id');
             $table->timestamps();
 
         });

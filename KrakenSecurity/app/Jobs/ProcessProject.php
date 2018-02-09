@@ -24,8 +24,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 class ProcessProject implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels,
-        //Dispatchable;
-        DispatchesJobs;
+        Dispatchable;
+        //DispatchesJobs;
 
     /**
      * @var Project
@@ -86,16 +86,12 @@ class ProcessProject implements ShouldQueue
                 }
 
                 $testInstance->save();
-                //dump($testInstance);
-                /*dump("start ".$test);
-                dump($testInstance);
-                dump("stop ".$test);*/
                 $report = Report::newReport($testInstance,$params);
+                $report->executeCommandeAndDefineReport($testInstance);
                 $report->saveIntoDB();
             }
         }
         $this->project->removeProjectTestingArea();
 
-        dump($this->project);
     }
 }
