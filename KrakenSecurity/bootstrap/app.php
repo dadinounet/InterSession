@@ -11,6 +11,8 @@
 |
 */
 
+header("Access-Control-Allow-Origin: *");
+
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
 );
